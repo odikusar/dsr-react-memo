@@ -1,0 +1,29 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  // background-color: var(--c-secondary-bg);
+  background-color: #424242;
+  height: 100%;
+}
+
+.dsr-content-wrapper {
+  // max-width: $wide-screen-workspace-width;
+  // height: calc(100% - $header-toolbar-height);
+  // background-color: var(--c-primary-bg);
+  margin: 0 auto;
+  overflow: auto;
+}
+
+.dsr-main-spinner {
+  margin: auto;
+  position: absolute;
+  top: calc(50% - 50px);
+  left: calc(50% - 50px);
+}

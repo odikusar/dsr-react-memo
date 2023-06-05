@@ -1,19 +1,30 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { createRoot } from "react-dom/client";
+// import "./index.css";
+// import { Provider } from "react-redux";
+// import { store, persistor } from "./store";
+// import { NoteBrowse } from "pages/NoteBrowse/NoteBrowse";
+// import { NoteCreate } from "pages/NoteCreate/NoteCreate";
+// import { Note } from "pages/Note/Note";
+// import { PageNotFound } from "pages/PageNotFound/PageNotFound";
+// import { Signin } from "pages/Signin/Signin";
+// import { FirebaseApp } from "utils/firebase";
+// import { ProtectedApp } from "./App";
+// import { Header } from './components/header/header';
+// import { AboutFeature } from './features/about/about';
+// import { LoginFeature } from './features/login/login';
+// import { WorkspaceFeature } from './features/workspace/workspace';
+// // FirebaseApp.init();
+import { App } from "./App";
+import "./index.scss";
+// const root = ReactDOM.createRoot(document.getElementById("root"));
+const container = document.getElementById("root")!;
+const root = createRoot(container);
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+  <App />
+  // <StrictMode>
+  // <Provider store={store}>
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  // </Provider>
+  // </StrictMode>
+);
