@@ -11,7 +11,7 @@ import { UserProfile } from 'models';
 import { FirebaseService } from 'utils/index';
 
 export class AuthApiService {
-  static userConverter = {
+  static typedConverter = {
     toFirestore(user: UserProfile): DocumentData {
       return user;
     },
@@ -38,12 +38,13 @@ export class AuthApiService {
     return signOut(FirebaseService.auth);
   }
 
-  static async loadUser(
+  static async fetchUser(
     userId: string
   ): Promise<DocumentSnapshot<UserProfile>> {
     const docRef = doc(FirebaseService.db, 'users', userId).withConverter(
-      this.userConverter
+      this.typedConverter
     );
+
     return getDoc(docRef);
   }
 }

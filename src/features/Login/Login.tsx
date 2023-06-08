@@ -31,7 +31,8 @@ const LoginFeature = () => {
     });
   }, [reset]);
 
-  const onSubmit = handleSubmit(async ({ email, password }) => {
+  const onSubmit = handleSubmit(async (prop: SignInFormData) => {
+    const { email, password } = prop;
     await dispatch(signInUser({ email, password }));
   });
 

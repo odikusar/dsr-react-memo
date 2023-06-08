@@ -4,4 +4,5 @@ export interface UserProfile {
   email: string;
   isDemo: boolean;
   isTranslationByDefault: boolean;
+  activeMemoFileId: string;
 }

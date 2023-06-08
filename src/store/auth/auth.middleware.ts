@@ -12,7 +12,7 @@ export const signInUser = createAsyncThunk(
       const user = await AuthApiService.signIn(email, password);
 
       if (user) {
-        const docSnap = await AuthApiService.loadUser(user.uid);
+        const docSnap = await AuthApiService.fetchUser(user.uid);
 
         if (docSnap.exists()) {
           const userData = docSnap.data();
@@ -39,7 +39,7 @@ export const initializeAuth = createAsyncThunk(
     const unsubscribe = FirebaseService.auth.onAuthStateChanged(
       async (user) => {
         if (user) {
-          const docSnap = await AuthApiService.loadUser(user.uid);
+          const docSnap = await AuthApiService.fetchUser(user.uid);
           dispatch(appInitialized());
 
           if (docSnap.exists()) {
