@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authSlice from './auth/auth.slice';
 import memoFileSlice from './memo-file/memo-file.slice';
+import { memoRowMiddleware } from './memo-row/memo-row.middleware';
+import memoRowSlice from './memo-row/memo-row.slice';
 import { themeMiddleware } from './theme/theme.middleware';
 import themeSlice from './theme/theme.slice';
 
@@ -9,9 +11,13 @@ export const store = configureStore({
     auth: authSlice,
     theme: themeSlice,
     memoFile: memoFileSlice,
+    memoRow: memoRowSlice,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }).concat(themeMiddleware),
+    getDefaultMiddleware({ serializableCheck: false }).concat(
+      themeMiddleware,
+      memoRowMiddleware
+    ),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

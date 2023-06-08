@@ -2,7 +2,8 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { initializeAuth } from 'store/auth/auth.middleware';
-import { selectAuth } from 'store/auth/auth.slice';
+import { selectAuth } from 'store/auth/auth.selectors';
+import { selectIsDarkTheme } from 'store/theme/theme.selectors';
 import { ThemeService } from 'utils';
 import './App.scss';
 import { Header } from './components/Header/Header';
@@ -14,7 +15,7 @@ import { GuestOnly } from './hoc/GuestOnly';
 import { useAppDispatch, useAppSelector } from './store/hooks';
 
 export function App() {
-  const isDarkTheme = useAppSelector((state) => state.theme.isDarkTheme);
+  const isDarkTheme = useAppSelector(selectIsDarkTheme);
 
   const selectedTheme = isDarkTheme
     ? ThemeService.darkTheme
@@ -23,13 +24,7 @@ export function App() {
   const dispatch = useAppDispatch();
   const { isInitialized } = useAppSelector(selectAuth);
 
-  // Remove to external hook???? !!!!!!!!!!!!!
   useEffect(() => {
-    // FirebaseService.init();
-    // getAuth().onAuthStateChanged((user: User | null) => {
-    //   console.info(user);
-    //   dispatch(init({ wew: 1 }));
-    // });
     dispatch(initializeAuth());
   }, []);
 

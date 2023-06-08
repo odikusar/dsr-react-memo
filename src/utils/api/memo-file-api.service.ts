@@ -1,8 +1,11 @@
 import {
   QueryDocumentSnapshot,
   SnapshotOptions,
+  addDoc,
   collection,
   getDocs,
+  query,
+  where,
 } from 'firebase/firestore';
 import { MemoFile } from 'models';
 import { FirebaseService } from 'utils/firebase.service';
@@ -35,13 +38,19 @@ export class MemoFileApiService {
   //   };
   // }
 
-  static async fetchAll(): Promise<MemoFile[]> {
+  static async fetchAll(userId: string): Promise<MemoFile[]> {
     const snapshot = await getDocs(
-      collection(FirebaseService.db, this.collectionName).withConverter(
-        genericConverter<MemoFile>()
+      query(
+        collection(FirebaseService.db, this.collectionName).withConverter(
+          genericConverter<MemoFile>()
+        ),
+        where('userId', '==', userId)
       )
     );
-
+    // query(
+    //   collection(FirebaseApp.db, "notes"),
+    //   orderBy("created_at", "asc")
+    // );
     let items: MemoFile[] = [];
 
     snapshot.forEach((item) => {
@@ -50,6 +59,30 @@ export class MemoFileApiService {
 
     return items;
   }
+
+  static async create(memoFile: Partial<MemoFile>): Promise<MemoFile> {
+    const response = await addDoc(
+      collection(FirebaseService.db, this.collectionName),
+      memoFile
+    );
+
+    return {
+      id: response.id,
+      ...memoFile,
+    } as MemoFile;
+  }
+
+  // static async delete(noteId) {
+  //   deleteDoc(doc(FirebaseApp.db, "notes", noteId));
+  // }
+  // static async updateById(id, values) {
+  //   const query = doc(FirebaseApp.db, "notes", id);
+  //   await updateDoc(query, values);
+  //   return {
+  //     id,
+  //     ...values,
+  //   };
+  // }
 
   // static async deleteById(noteId) {
   //   deleteDoc(doc(FirebaseApp.db, 'notes', noteId));

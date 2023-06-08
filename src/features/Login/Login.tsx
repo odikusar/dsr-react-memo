@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Navigate } from 'react-router-dom';
 import { signInUser, signOutUser } from 'store/auth/auth.middleware';
-import { selectAuth } from 'store/auth/auth.slice';
+import { selectAuth } from 'store/auth/auth.selectors';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 
 type SignInFormData = {

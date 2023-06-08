@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { UserProfile } from 'models';
-import { RootState } from 'store/store';
 import { initializeAuth, signInUser, signOutUser } from './auth.middleware';
 
 interface AuthState {
@@ -85,5 +84,3 @@ export const { appInitialized, setUser, setIsLoading, setError } =
   authSlice.actions;
 
 export default authSlice.reducer;
-
-export const selectAuth = (state: RootState) => state.auth;

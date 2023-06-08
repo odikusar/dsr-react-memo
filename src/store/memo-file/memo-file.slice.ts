@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { MemoFile } from 'models';
-import { RootState } from 'store/store';
-import { fetchMemoFiles } from './memo-file.middleware';
+import { createMemoFile, fetchMemoFiles } from './memo-file.middleware';
 
 interface MemoFileState {
   memoFiles: MemoFile[];
@@ -32,6 +31,10 @@ const memoFileSlice = createSlice({
       .addCase(fetchMemoFiles.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message || 'Error fetching Memo Files';
+      })
+      .addCase(createMemoFile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.memoFiles.push(action.payload);
       });
   },
 });
@@ -40,5 +43,3 @@ const memoFileSlice = createSlice({
 //   authSlice.actions;
 
 export default memoFileSlice.reducer;
-
-export const selectMemoFile = (state: RootState) => state.memoFile;

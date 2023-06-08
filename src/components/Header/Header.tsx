@@ -8,7 +8,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Switch } from '@mui/material';
 import { Navigate } from 'react-router-dom';
 import { signOutUser } from 'store/auth/auth.middleware';
-import { selectAuth } from 'store/auth/auth.slice';
+import { selectAuth } from 'store/auth/auth.selectors';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { toggleTheme } from '../../store/theme/theme.slice';
 

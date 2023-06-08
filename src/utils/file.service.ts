@@ -12,31 +12,33 @@ export class FileService {
   private static readonly basePath: string = '/csv';
   private static readonly RANDOM_FILENAME_PREFIX_LENGTH: number = 10;
 
-  static upload(file: File, memoFile: MemoFile = null) {
-    /// type
-    const fileName = this.getRandomFileName(file.name);
-    const filePath = this.getFilePath(fileName);
-    const storage = getStorage(FirebaseService.firebaseApp);
-    const storageRef = ref(storage, filePath);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+  static upload(
+    file: File,
+    memoFile: MemoFile = null
+  ): Promise<Partial<MemoFile>> {
+    return new Promise((resolve, reject) => {
+      const fileName = this.getRandomFileName(file.name);
+      const filePath = this.getFilePath(fileName);
+      const storage = getStorage(FirebaseService.firebaseApp);
+      const storageRef = ref(storage, filePath);
+      const uploadTask = uploadBytesResumable(storageRef, file);
 
-    uploadTask.on(
-      'state_changed',
-      () => {},
-      (error) => {},
-      () =>
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log('!!!!', downloadURL);
-
-          // this.memoFileFacade.create({
-          //   url: downloadURL,
-          //   name: fileName,
-          //   initialName: file.name,
-          //   userId: this.userFacade.userId,
-          // });
-        })
-    );
-
+      uploadTask.on(
+        'state_changed',
+        () => {},
+        (error) => {
+          reject(error);
+        },
+        () =>
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            resolve({
+              name: fileName,
+              initialName: file.name,
+              url: downloadURL,
+            });
+          })
+      );
+    });
     // return uploadTask.snapshotChanges().pipe(
     //   finalize(() =>
     //     this.storage

@@ -15,6 +15,7 @@ export class ThemeService {
   }
 
   static readonly darkTheme = createTheme({
+    /// Move colors to constants !!!
     palette: {
       mode: 'dark',
       background: {

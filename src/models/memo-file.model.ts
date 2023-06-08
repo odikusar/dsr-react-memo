@@ -1,5 +1,5 @@
 export interface MemoFile {
-  id: string;
+  id?: string;
   userId: string;
   name: string;
   initialName: string;
