@@ -1,3 +1,8 @@
+@import "./styles/partials/colors";
+@import "./styles/partials/variables";
+@import "./styles/partials/mixins";
+@import "./styles/theme";
+
 html,
 body {
   height: 100%;
@@ -8,22 +13,49 @@ body {
 }
 
 #root {
-  // background-color: var(--c-secondary-bg);
-  background-color: #424242;
   height: 100%;
 }
 
-.dsr-content-wrapper {
-  // max-width: $wide-screen-workspace-width;
-  // height: calc(100% - $header-toolbar-height);
-  // background-color: var(--c-primary-bg);
-  margin: 0 auto;
-  overflow: auto;
+@include tiny-screens {
+  .dsr-hide-for-small {
+    display: none !important;
+  }
 }
 
-.dsr-main-spinner {
-  margin: auto;
-  position: absolute;
-  top: calc(50% - 50px);
-  left: calc(50% - 50px);
+@include small-screens {
+  .dsr-hide-for-small {
+    display: none !important;
+  }
+}
+
+.dsr-link-btn {
+  cursor: pointer;
+  opacity: 0.8;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.dsr-hide {
+  display: none;
+}
+
+hr {
+  opacity: 0.7;
+  margin: 15px 25px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  // background: $mat-accent-lighter;
+}
+
+::-webkit-scrollbar-thumb {
+  // background: $mat-dark-accent-200;
 }

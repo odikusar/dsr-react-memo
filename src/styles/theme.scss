@@ -1,0 +1,21 @@
+@import "./partials/colors";
+
+// LIGHT THEME
+.dsr-main-wrapper {
+  --c-primary-bg: #{$light-background};
+  --c-secondary-bg: #{$light-bg-darker};
+  --c-text: #{$dark-text};
+  --c-header-bg: #{$light-header-background};
+
+  color: $dark-text;
+}
+
+// DARK THEME
+.dsr-main-wrapper.dsr-dark-theme {
+  --c-primary-bg: #{$dark-background};
+  --c-secondary-bg: #{$dark-bg-lighter};
+  --c-text: #{$light-text};
+  --c-header-bg: #{$dark-header-background};
+
+  color: $light-text;
+}

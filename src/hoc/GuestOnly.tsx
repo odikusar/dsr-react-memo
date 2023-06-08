@@ -1,21 +1,15 @@
 // import { useSelector } from "react-redux";
-import { useEffect } from "react";
-import { useNavigate, useOutlet } from "react-router-dom";
+import { Navigate, useOutlet } from 'react-router-dom';
+import { useAppSelector } from 'store';
+import { selectAuth } from 'store/auth/auth.slice';
 
 export const GuestOnly = () => {
   const outlet = useOutlet();
+  const { isAuthorized } = useAppSelector(selectAuth);
 
-  const navigate = useNavigate();
-  // const user = { a: 1 };
-  const user = null;
-  // const user = useSelector((store) => store.authSlice.auth.user);
-
-  useEffect(() => {
-    if (!!user) {
-      navigate("/");
-    }
-    // }, [user]);
-  }, []);
-
-  return !user && outlet;
+  if (isAuthorized) {
+    return <Navigate to="/" />;
+  } else {
+    return outlet;
+  }
 };

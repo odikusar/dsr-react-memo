@@ -1,0 +1,39 @@
+@import "../../styles/partials/variables";
+@import "../../styles/partials/colors";
+
+.dsr-header-toolbar {
+  &.mat-toolbar {
+    height: $header-toolbar-height;
+    background-color: var(--c-header-bg);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    padding: 0 24px;
+    width: $wide-screen-workspace-width;
+    margin: 0 auto;
+    color: $light-text;
+
+    > *,
+    a {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: $light-text;
+    }
+  }
+
+  &__side-block {
+    margin-left: auto;
+  }
+}
+
+.dsr-header-active {
+  display: none !important;
+}
+
+.dsr-header-title {
+  opacity: 0.8;
+}

@@ -1,76 +1,75 @@
-// import React from 'react';
-// import logo from './logo.svg';
-// import './App.css';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { useEffect } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { initializeAuth } from 'store/auth/auth.middleware';
+import { selectAuth } from 'store/auth/auth.slice';
+import { ThemeService } from 'utils';
+import './App.scss';
+import { Header } from './components/Header/Header';
+import { AboutFeature } from './features/About/About';
+import LoginFeature from './features/Login/Login';
+import { WorkspaceFeature } from './features/Workspace/Workspace';
+import { AuthOnly } from './hoc/AuthOnly';
+import { GuestOnly } from './hoc/GuestOnly';
+import { useAppDispatch, useAppSelector } from './store/hooks';
 
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.tsx</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;
-// import { ProtectedApp } from "./App";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Header } from "./components/Header/Header";
-import { AboutFeature } from "./features/About/About";
-import { LoginFeature } from "./features/Login/Login";
-import { WorkspaceFeature } from "./features/Workspace/Workspace";
-// FirebaseApp.init();
-
-// import { useEffect } from "react";
-// import { useDispatch } from "react-redux";
-// import { useNavigate } from "react-router-dom";
-// import { setNoteList } from "store/notes/notes-slice";
-// import { WithAuthRequired } from "./hoc/withAuthRequired";
-import { AuthOnly } from "./hoc/AuthOnly";
-import { GuestOnly } from "./hoc/GuestOnly";
-// export const ProtectedApp = WithAuthRequired(App);
 export function App() {
-  // const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const isDarkTheme = useAppSelector((state) => state.theme.isDarkTheme);
 
-  // async function fetchNotes() {
-  //   const noteList = await NoteAPI.fetchAll();
-  //   dispatch(setNoteList(noteList));
-  // }
+  const selectedTheme = isDarkTheme
+    ? ThemeService.darkTheme
+    : ThemeService.lightTheme;
 
-  // useEffect(() => {
-  //   fetchNotes();
-  // }, []);
+  const dispatch = useAppDispatch();
+  const { isInitialized } = useAppSelector(selectAuth);
+
+  // Remove to external hook???? !!!!!!!!!!!!!
+  useEffect(() => {
+    // FirebaseService.init();
+    // getAuth().onAuthStateChanged((user: User | null) => {
+    //   console.info(user);
+    //   dispatch(init({ wew: 1 }));
+    // });
+    dispatch(initializeAuth());
+  }, []);
+
+  if (!isInitialized) {
+    return (
+      <div
+        className={
+          'dsr-main-wrapper ' +
+          (isDarkTheme ? 'dsr-dark-theme' : 'dsr-light-theme')
+        }
+      >
+        <div className="dsr-main-spinner"></div>
+      </div>
+    );
+  }
 
   return (
     <BrowserRouter>
-      <div className="dsr-main-wrapper">
-        <Header />
-        <div className="dsr-content-wrapper">
-          <Routes>
-            <Route path="/about" element={<AboutFeature />} />
-            <Route element={<GuestOnly />}>
-              <Route path="/login" element={<LoginFeature />} />
-            </Route>
-            <Route element={<AuthOnly />}>
-              <Route path="/" element={<WorkspaceFeature />} />
-            </Route>
-          </Routes>
+      <ThemeProvider theme={selectedTheme}>
+        <CssBaseline />
+        <div
+          className={
+            'dsr-main-wrapper ' +
+            (isDarkTheme ? 'dsr-dark-theme' : 'dsr-light-theme')
+          }
+        >
+          <Header />
+          <div className="dsr-content-wrapper">
+            <Routes>
+              <Route path="/about" element={<AboutFeature />} />
+              <Route element={<GuestOnly />}>
+                <Route path="/login" element={<LoginFeature />} />
+              </Route>
+              <Route element={<AuthOnly />}>
+                <Route path="/" element={<WorkspaceFeature />} />
+              </Route>
+            </Routes>
+          </div>
         </div>
-      </div>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }
-
-// export const ProtectedApp = withAuthRequired(App);
