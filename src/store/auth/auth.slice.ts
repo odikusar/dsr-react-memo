@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { UserProfile } from 'models';
-import { initializeAuth, signInUser, signOutUser } from './auth.middleware';
+import {
+  initializeAuth,
+  signInUser,
+  signOutUser,
+  updateUser,
+} from './auth.middleware';
 
 interface AuthState {
   user: UserProfile | null;
@@ -62,6 +67,15 @@ const authSlice = createSlice({
       .addCase(signInUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+      .addCase(updateUser.pending, (state, action) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.error = null;
+        state.user = action.payload;
       })
       .addCase(signOutUser.pending, (state) => {
         state.isLoading = true;

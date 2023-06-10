@@ -1,2 +1,37 @@
-.container {
+@import '/src/styles/partials/colors';
+@import '/src/styles/partials/mixins';
+.dsr-card-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.dsr-card {
+  background-color: $attention-color;
+  border-radius: 4px;
+  padding: 10px;
+  color: $attention-text-color;
+  min-width: 450px;
+  font-size: 18px;
+}
+
+@include small-screens {
+  .dsr-card {
+    width: 330px;
+    min-width: 330px;
+  }
+}
+
+.dsr-card-word {
+  text-align: center;
+  min-height: 55px;
+  display: flex;
+  align-items: baseline;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+hr {
+  border-top: 1px dashed #3f4854;
+  margin: 0 15px;
 }

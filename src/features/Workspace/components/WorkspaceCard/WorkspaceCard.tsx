@@ -1,8 +1,30 @@
-import { MemoFile } from 'models';
+import { MemoRow } from 'models';
 import './WorkspaceCard.scss';
 
-export function WorkspaceCard(props: { memoFiles: MemoFile[] }) {
-  const { memoFiles } = props;
-
-  return <div>WorkspaceCard: {memoFiles.length}</div>;
+export function WorkspaceCard({
+  memoRow,
+  isTranslationByDefault,
+  isAnswerDisplayed,
+}: {
+  memoRow: MemoRow;
+  isTranslationByDefault: boolean;
+  isAnswerDisplayed: boolean;
+}) {
+  return (
+    <div className="dsr-card-wrapper">
+      <div className="dsr-card">
+        <div className="dsr-card-word">
+          {(!isTranslationByDefault || isAnswerDisplayed) && (
+            <span>{memoRow?.word}</span>
+          )}
+        </div>
+        <hr />
+        <div className="dsr-card-word">
+          {(isTranslationByDefault || isAnswerDisplayed) && (
+            <span>{memoRow?.translate}</span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }

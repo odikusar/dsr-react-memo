@@ -6,6 +6,7 @@ import {
   SnapshotOptions,
   doc,
   getDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import { UserProfile } from 'models';
 import { FirebaseService } from 'utils/index';
@@ -46,5 +47,14 @@ export class AuthApiService {
     );
 
     return getDoc(docRef);
+  }
+
+  static async updateUser(
+    userId: string,
+    changes: Partial<UserProfile>
+  ): Promise<void> {
+    const docRef = doc(FirebaseService.db, 'users', userId);
+
+    return updateDoc(docRef, changes);
   }
 }

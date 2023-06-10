@@ -17,7 +17,12 @@ const initialState: MemoFileState = {
 const memoFileSlice = createSlice({
   name: 'memoFile',
   initialState,
-  reducers: {},
+  reducers: {
+    setActiveMemoFile: (state, action) => {
+      state.isLoading = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchMemoFiles.pending, (state) => {
@@ -39,7 +44,6 @@ const memoFileSlice = createSlice({
   },
 });
 
-// export const { appInitialized, setUser, setIsLoading, setError } =
-//   authSlice.actions;
+export const { setActiveMemoFile } = memoFileSlice.actions;
 
 export default memoFileSlice.reducer;

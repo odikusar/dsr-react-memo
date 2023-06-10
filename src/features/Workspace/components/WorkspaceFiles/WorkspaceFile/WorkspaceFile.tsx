@@ -7,5 +7,7 @@ export function WorkspaceFile(props: {
 }) {
   const { memoFile, selectMemoFile } = props;
 
-  return <div onClick={() => selectMemoFile(memoFile)}>{memoFile.name}</div>;
+  return (
+    <div onClick={() => selectMemoFile(memoFile)}>{memoFile.initialName}</div>
+  );
 }

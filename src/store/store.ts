@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authSlice from './auth/auth.slice';
+import { memoFileMiddleware } from './memo-file/memo-file.middleware';
 import memoFileSlice from './memo-file/memo-file.slice';
 import { memoRowMiddleware } from './memo-row/memo-row.middleware';
 import memoRowSlice from './memo-row/memo-row.slice';
@@ -16,7 +17,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(
       themeMiddleware,
-      memoRowMiddleware
+      memoRowMiddleware,
+      memoFileMiddleware
     ),
 });
 

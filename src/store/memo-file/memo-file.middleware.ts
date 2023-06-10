@@ -1,13 +1,33 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { MemoFile } from 'models';
+import {
+  AnyAction,
+  Dispatch,
+  Middleware,
+  PayloadAction,
+  createAsyncThunk,
+} from '@reduxjs/toolkit';
+import { MemoFile, UserProfile } from 'models';
+import { updateUser } from 'store/auth/auth.middleware';
+import { fetchMemoRows } from 'store/memo-row/memo-row.slice';
+import { AppDispatch, RootState } from 'store/store';
 import { MemoFileApiService } from 'utils';
 
 export const fetchMemoFiles = createAsyncThunk(
   'memoFile/fetchAll',
-  async (currentUserId: string) => {
-    const response = await MemoFileApiService.fetchAll(currentUserId);
+  async (currentUserId: string, { getState, dispatch }) => {
+    const memoFiles = await MemoFileApiService.fetchAll(currentUserId);
+    const state = getState() as RootState;
+    const activeMemoFileId = state.auth.user.activeMemoFileId;
+    let activeMemoFile = memoFiles.find(
+      (memoFile) => memoFile.id === activeMemoFileId
+    );
 
-    return response;
+    if (!activeMemoFile) {
+      activeMemoFile = memoFiles[0];
+    }
+
+    dispatch(fetchMemoRows(activeMemoFile));
+
+    return memoFiles;
   }
 );
 
@@ -15,23 +35,21 @@ export const createMemoFile = createAsyncThunk(
   'memoFile/create',
   async (memoFile: MemoFile) => {
     const response = await MemoFileApiService.create(memoFile);
-
     return response;
   }
 );
 
-// export const updateNote = createAsyncThunk(
-//   'notes/updateNote',
-//   async (note: Note) => {
-//     await db.collection('notes').doc(note.id).update({ title: note.title });
-//     return note;
-//   }
-// );
+export const memoFileMiddleware: Middleware =
+  (store) =>
+  (next: Dispatch<AnyAction>) =>
+  (action: PayloadAction<MemoFile>) => {
+    if (action.type === 'memoFile/setActiveMemoFile') {
+      const user = store.getState().auth.user as UserProfile;
+      const dispatch = store.dispatch as AppDispatch;
 
-// export const deleteNote = createAsyncThunk(
-//   'notes/deleteNote',
-//   async (id: string) => {
-//     await db.collection('notes').doc(id).delete();
-//     return id;
-//   }
-// );
+      dispatch(fetchMemoRows(action.payload));
+      dispatch(updateUser({ ...user, activeMemoFileId: action.payload.id }));
+    }
+
+    return next(action);
+  };

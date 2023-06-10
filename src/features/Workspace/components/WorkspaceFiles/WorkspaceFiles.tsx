@@ -3,7 +3,7 @@ import { MemoFile } from 'models';
 import { useRef } from 'react';
 import { useAppDispatch } from 'store';
 import { createMemoFile } from 'store/memo-file/memo-file.middleware';
-import { fetchMemoRows } from 'store/memo-row/memo-row.slice';
+import { setActiveMemoFile } from 'store/memo-file/memo-file.slice';
 import { FileService } from 'utils/file.service';
 import { WorkspaceFile } from './WorkspaceFile/WorkspaceFile';
 import './WorkspaceFiles.scss';
@@ -20,8 +20,6 @@ export function WorkspaceFiles(props: {
   const handleClick = () => {
     hiddenFileInput.current.click();
   };
-
-  console.log(currentUserId);
 
   const uploadMemoFile = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -42,7 +40,7 @@ export function WorkspaceFiles(props: {
     }
   };
   const selectMemoFile = (memoFile: MemoFile) => {
-    dispatch(fetchMemoRows(memoFile));
+    dispatch(setActiveMemoFile(memoFile));
   };
 
   return (
