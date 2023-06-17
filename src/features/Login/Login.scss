@@ -1,0 +1,17 @@
+@import '../../styles/partials/colors';
+
+.dsr-login-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.dsr-login-error {
+  padding: 16px;
+  width: 100%;
+  color: white;
+  margin-top: 10px;
+  background-color: $warn-main;
+}

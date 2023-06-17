@@ -1,10 +1,19 @@
 import { DEMO_USER } from 'constants/index';
+import './Login.scss';
 
-import { Button, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Navigate } from 'react-router-dom';
-import { signInUser, signOutUser } from 'store/auth/auth.middleware';
+import { signInUser } from 'store/auth/auth.middleware';
 import { selectAuth } from 'store/auth/auth.selectors';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 
@@ -36,48 +45,51 @@ const LoginFeature = () => {
     await dispatch(signInUser({ email, password }));
   });
 
-  const handleSignOut = () => {
-    dispatch(signOutUser());
-  };
-
   if (isAuthorized) {
     return <Navigate to="/" />;
   }
 
   return (
-    <div>
-      <form onSubmit={onSubmit}>
-        <br /> <br />
-        <TextField
-          label="Email"
-          type="email"
-          {...register('email', { required: true })}
-        />
-        {errors.email && <span>This field is required</span>}
-        <br />
-        <br />
-        <br />
-        <TextField
-          label="Password"
-          type="password"
-          {...register('password', { required: true })}
-        />
-        {errors.password && <span>This field is required</span>}
-        <br />
-        <br />
-        <br />
-        {error && <span>{error}</span>}
-        <br />
-        <Button type="submit" disabled={isLoading}>
-          Sign In
-        </Button>
-      </form>
-      {isAuthorized && (
-        <div>
-          <br />
-          <Button onClick={handleSignOut}>Sign Out</Button>
-        </div>
-      )}
+    <div className="dsr-login-page">
+      <Box sx={{ minWidth: 400, maxWidth: '80%' }}>
+        <Card>
+          <form onSubmit={onSubmit}>
+            <CardContent>
+              <Typography sx={{ mb: 3 }} component="h1" variant="h5">
+                Sign in
+              </Typography>
+              <TextField
+                label="Email"
+                type="email"
+                required
+                fullWidth
+                {...register('email', { required: true })}
+              />
+              {errors.email && <span>This field is required</span>}
+              <Box sx={{ mt: 3 }}>
+                <TextField
+                  label="Password"
+                  type="password"
+                  required
+                  fullWidth
+                  {...register('password', { required: true })}
+                />
+                {error && <div className="dsr-login-error">{error}</div>}
+              </Box>
+            </CardContent>
+            <CardActions sx={{ m: 1 }}>
+              <Button
+                fullWidth
+                type="submit"
+                variant="outlined"
+                disabled={isLoading}
+              >
+                Sign in
+              </Button>
+            </CardActions>
+          </form>
+        </Card>
+      </Box>
     </div>
   );
 };

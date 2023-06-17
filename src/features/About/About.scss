@@ -1,0 +1,14 @@
+@import '../../styles/partials/colors';
+
+.dsr-about-content {
+  padding: 25px;
+}
+
+.dsr-image-screen {
+  text-align: center;
+
+  img {
+    width: 200px;
+    border: 1px solid $dark-border-lighter;
+  }
+}

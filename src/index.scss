@@ -1,7 +1,7 @@
-@import "./styles/partials/colors";
-@import "./styles/partials/variables";
-@import "./styles/partials/mixins";
-@import "./styles/theme";
+@import './styles/partials/colors';
+@import './styles/partials/variables';
+@import './styles/partials/mixins';
+@import './styles/theme';
 
 html,
 body {
@@ -53,9 +53,9 @@ hr {
 }
 
 ::-webkit-scrollbar-track {
-  // background: $mat-accent-lighter;
+  background: $light-border;
 }
 
 ::-webkit-scrollbar-thumb {
-  // background: $mat-dark-accent-200;
+  background: $dark-border-lighter;
 }
