@@ -1,7 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { UserProfile } from 'models';
 import { AuthApiService, FirebaseService } from 'utils';
-import { appInitialized, setError, setUser } from './auth.slice';
+import {
+  appInitialized,
+  optimisticUserUpdate,
+  setError,
+  setUser,
+} from './auth.slice';
 
 export const initializeAuth = createAsyncThunk(
   'auth/initialize',
@@ -66,6 +71,8 @@ export const signOutUser = createAsyncThunk('auth/signOutUser', async () => {
 export const updateUser = createAsyncThunk(
   'auth/updateUser',
   async (user: UserProfile, { dispatch }) => {
+    dispatch(optimisticUserUpdate(user));
+
     try {
       await AuthApiService.updateUser(user.id, user);
 

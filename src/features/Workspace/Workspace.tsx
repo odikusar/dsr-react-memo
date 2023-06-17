@@ -1,9 +1,12 @@
 import { MemoRow } from 'models';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store';
+import { updateUser } from 'store/auth/auth.middleware';
 import {
   selectActiveMemoFileId,
   selectCurrentUserId,
+  selectIsTranslationByDefault,
+  selectUser,
 } from 'store/auth/auth.selectors';
 import { fetchMemoFiles } from 'store/memo-file/memo-file.middleware';
 import { selectMemoFiles } from 'store/memo-file/memo-file.selectors';
@@ -25,9 +28,11 @@ export function WorkspaceFeature() {
   const memoFiles = useAppSelector(selectMemoFiles);
   const currentUserId = useAppSelector(selectCurrentUserId);
   const activeMemoFileId = useAppSelector(selectActiveMemoFileId);
+  const isTranslationByDefault = useAppSelector(selectIsTranslationByDefault);
   const selectedFreshMemoRows = useAppSelector(selectAllFreshInSelection);
   const allMemoRows = useAppSelector(selectMemoRows);
   const rowsLeftCount = useAppSelector(selectMemoRowsLeftCount);
+  const user = useAppSelector(selectUser);
   const [memoRow, setMemoRow] = useState<MemoRow>(null);
   const [isAnswerDisplayed, setIsAnswerDisplayed] = useState<boolean>(false);
 
@@ -41,8 +46,12 @@ export function WorkspaceFeature() {
     }
   }, [selectedFreshMemoRows]);
 
-  const changeIsAnswerDisplayed = (value: boolean): void => {
+  const changeAnswerDisplayed = (value: boolean): void => {
     setIsAnswerDisplayed(value);
+  };
+
+  const changeTranslationByDefault = (value: boolean): void => {
+    dispatch(updateUser({ ...user, isTranslationByDefault: value }));
   };
 
   return (
@@ -51,7 +60,12 @@ export function WorkspaceFeature() {
       <br />
       <b>{!!allMemoRows && allMemoRows.length}</b>
       <br />
-      <WorkspaceFiles memoFiles={memoFiles} currentUserId={currentUserId} />
+      <WorkspaceFiles
+        activeMemoFileId={activeMemoFileId}
+        memoFiles={memoFiles}
+        currentUserId={currentUserId}
+      />
+
       <WorkspacePagination
         rowsTotalCount={allMemoRows?.length}
         currentMemoRowId={!!memoRow ? memoRow.id + 1 : 0}
@@ -60,15 +74,16 @@ export function WorkspaceFeature() {
 
       <WorkspaceCard
         memoRow={memoRow}
-        isTranslationByDefault={false}
         isAnswerDisplayed={isAnswerDisplayed}
+        isTranslationByDefault={isTranslationByDefault}
       />
 
       <WorkspaceControls
         memoRow={memoRow}
-        isTranslationByDefault={false}
         rowsLeftCount={rowsLeftCount}
-        changeIsAnswerDisplayed={changeIsAnswerDisplayed}
+        changeAnswerDisplayed={changeAnswerDisplayed}
+        changeTranslationByDefault={changeTranslationByDefault}
+        isTranslationByDefault={isTranslationByDefault}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { UserProfile } from 'models';
 import {
   initializeAuth,
@@ -27,74 +27,85 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setUser: (state, action) => {
-      state.user = action.payload;
-      state.isAuthorized = !!action.payload;
-      state.isLoading = false;
-      state.error = null;
+    setUser: (currentSlice, action: PayloadAction<UserProfile>) => {
+      currentSlice.user = action.payload;
+      currentSlice.isAuthorized = !!action.payload;
+      currentSlice.isLoading = false;
+      currentSlice.error = null;
     },
-    appInitialized: (state) => {
-      state.isInitialized = true;
+    appInitialized: (currentSlice) => {
+      currentSlice.isInitialized = true;
     },
-    setIsLoading: (state, action) => {
-      state.isLoading = action.payload;
+    setIsLoading: (currentSlice, action: PayloadAction<boolean>) => {
+      currentSlice.isLoading = action.payload;
     },
-    setError: (state, action) => {
-      state.error = action.payload;
+    setError: (currentSlice, action) => {
+      currentSlice.error = action.payload;
+    },
+    optimisticUserUpdate: (
+      currentSlice,
+      action: PayloadAction<UserProfile>
+    ) => {
+      currentSlice.user = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(initializeAuth.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+      .addCase(initializeAuth.pending, (currentSlice) => {
+        currentSlice.isLoading = true;
+        currentSlice.error = null;
       })
-      .addCase(initializeAuth.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message || null;
+      .addCase(initializeAuth.rejected, (currentSlice, action) => {
+        currentSlice.isLoading = false;
+        currentSlice.error = action.error.message || null;
       })
-      .addCase(initializeAuth.fulfilled, (state, action) => {
-        state.isLoading = false;
+      .addCase(initializeAuth.fulfilled, (currentSlice, action) => {
+        currentSlice.isLoading = false;
       })
-      .addCase(signInUser.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+      .addCase(signInUser.pending, (currentSlice) => {
+        currentSlice.isLoading = true;
+        currentSlice.error = null;
       })
-      .addCase(signInUser.fulfilled, (state) => {
-        state.isLoading = false;
-        state.error = null;
+      .addCase(signInUser.fulfilled, (currentSlice) => {
+        currentSlice.isLoading = false;
+        currentSlice.error = null;
       })
-      .addCase(signInUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload as string;
+      .addCase(signInUser.rejected, (currentSlice, action) => {
+        currentSlice.isLoading = false;
+        currentSlice.error = action.payload as string;
       })
-      .addCase(updateUser.pending, (state, action) => {
-        state.isLoading = true;
-        state.error = null;
+      .addCase(updateUser.pending, (currentSlice, action) => {
+        currentSlice.isLoading = true;
+        currentSlice.error = null;
       })
-      .addCase(updateUser.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.error = null;
-        state.user = action.payload;
+      .addCase(updateUser.fulfilled, (currentSlice, action) => {
+        currentSlice.isLoading = false;
+        currentSlice.error = null;
+        currentSlice.user = action.payload;
       })
-      .addCase(signOutUser.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+      .addCase(signOutUser.pending, (currentSlice) => {
+        currentSlice.isLoading = true;
+        currentSlice.error = null;
       })
-      .addCase(signOutUser.fulfilled, (state) => {
-        state.user = null;
-        state.isLoading = false;
-        state.error = null;
-        state.isAuthorized = false;
+      .addCase(signOutUser.fulfilled, (currentSlice) => {
+        currentSlice.user = null;
+        currentSlice.isLoading = false;
+        currentSlice.error = null;
+        currentSlice.isAuthorized = false;
       })
-      .addCase(signOutUser.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload as string;
+      .addCase(signOutUser.rejected, (currentSlice, action) => {
+        currentSlice.isLoading = false;
+        currentSlice.error = action.payload as string;
       });
   },
 });
 
-export const { appInitialized, setUser, setIsLoading, setError } =
-  authSlice.actions;
+export const {
+  appInitialized,
+  setUser,
+  setIsLoading,
+  setError,
+  optimisticUserUpdate,
+} = authSlice.actions;
 
 export default authSlice.reducer;

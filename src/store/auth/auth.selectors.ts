@@ -12,3 +12,13 @@ export const selectActiveMemoFileId = createSelector(
   selectAuth,
   (selectAuth) => selectAuth.user.activeMemoFileId
 );
+
+export const selectIsTranslationByDefault = createSelector(
+  selectAuth,
+  (selectAuth) => selectAuth.user.isTranslationByDefault
+);
+
+export const selectUser = createSelector(
+  selectAuth,
+  (selectAuth) => selectAuth.user
+);

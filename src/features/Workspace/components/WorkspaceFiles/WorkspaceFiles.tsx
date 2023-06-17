@@ -8,12 +8,15 @@ import { FileService } from 'utils/file.service';
 import { WorkspaceFile } from './WorkspaceFile/WorkspaceFile';
 import './WorkspaceFiles.scss';
 
-export function WorkspaceFiles(props: {
+export function WorkspaceFiles({
+  memoFiles,
+  currentUserId,
+  activeMemoFileId,
+}: {
   memoFiles: MemoFile[];
   currentUserId: string;
+  activeMemoFileId: string;
 }) {
-  const { memoFiles, currentUserId } = props;
-
   const hiddenFileInput = useRef(null);
   const dispatch = useAppDispatch();
 
@@ -57,6 +60,7 @@ export function WorkspaceFiles(props: {
       {!!memoFiles &&
         memoFiles.map((memoFile) => (
           <WorkspaceFile
+            isActive={activeMemoFileId === memoFile.id}
             key={memoFile.id}
             memoFile={memoFile}
             selectMemoFile={selectMemoFile}

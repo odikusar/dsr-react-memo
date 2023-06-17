@@ -1,13 +1,18 @@
 import { MemoFile } from 'models';
 import './WorkspaceFile.scss';
 
-export function WorkspaceFile(props: {
+export function WorkspaceFile({
+  memoFile,
+  selectMemoFile,
+  isActive,
+}: {
   memoFile: MemoFile;
   selectMemoFile(memoFile: MemoFile): void;
+  isActive: boolean;
 }) {
-  const { memoFile, selectMemoFile } = props;
-
   return (
-    <div onClick={() => selectMemoFile(memoFile)}>{memoFile.initialName}</div>
+    <div onClick={() => selectMemoFile(memoFile)}>
+      {memoFile.initialName} {isActive && <span> - selected</span>}
+    </div>
   );
 }

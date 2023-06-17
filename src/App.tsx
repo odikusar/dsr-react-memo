@@ -26,7 +26,7 @@ export function App() {
 
   useEffect(() => {
     dispatch(initializeAuth());
-  }, []);
+  }, [dispatch]);
 
   if (!isInitialized) {
     return (

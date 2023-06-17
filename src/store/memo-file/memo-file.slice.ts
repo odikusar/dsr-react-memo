@@ -18,28 +18,29 @@ const memoFileSlice = createSlice({
   name: 'memoFile',
   initialState,
   reducers: {
-    setActiveMemoFile: (state, action) => {
-      state.isLoading = false;
-      state.error = null;
+    setActiveMemoFile: (currentSlice, action) => {
+      currentSlice.isLoading = false;
+      currentSlice.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchMemoFiles.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+      .addCase(fetchMemoFiles.pending, (currentSlice) => {
+        currentSlice.isLoading = true;
+        currentSlice.error = null;
       })
-      .addCase(fetchMemoFiles.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.memoFiles = action.payload;
+      .addCase(fetchMemoFiles.fulfilled, (currentSlice, action) => {
+        currentSlice.isLoading = false;
+        currentSlice.memoFiles = action.payload;
       })
-      .addCase(fetchMemoFiles.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message || 'Error fetching Memo Files';
+      .addCase(fetchMemoFiles.rejected, (currentSlice, action) => {
+        currentSlice.isLoading = false;
+        currentSlice.error =
+          action.error.message || 'Error fetching Memo Files';
       })
-      .addCase(createMemoFile.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.memoFiles.push(action.payload);
+      .addCase(createMemoFile.fulfilled, (currentSlice, action) => {
+        currentSlice.isLoading = false;
+        currentSlice.memoFiles.push(action.payload);
       });
   },
 });

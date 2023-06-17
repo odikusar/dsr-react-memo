@@ -1,18 +1,23 @@
 import { MemoRow } from 'models';
 import { useAppDispatch } from 'store';
-import { setShownMemoRowId } from 'store/memo-row/memo-row.slice';
+import {
+  resetMemoRows,
+  setShownMemoRowId,
+} from 'store/memo-row/memo-row.slice';
 import './WorkspaceControls.scss';
 
 export function WorkspaceControls({
   memoRow,
   isTranslationByDefault,
   rowsLeftCount,
-  changeIsAnswerDisplayed,
+  changeAnswerDisplayed,
+  changeTranslationByDefault,
 }: {
   memoRow: MemoRow;
   isTranslationByDefault: boolean;
   rowsLeftCount: number;
-  changeIsAnswerDisplayed: (value: boolean) => void;
+  changeAnswerDisplayed: (value: boolean) => void;
+  changeTranslationByDefault: (value: boolean) => void;
 }) {
   const dispatch = useAppDispatch();
 
@@ -26,14 +31,22 @@ export function WorkspaceControls({
   // setShownMemoRowId
 
   const showNext = (): void => {
-    changeIsAnswerDisplayed(false);
+    changeAnswerDisplayed(false);
     dispatch(setShownMemoRowId(memoRow.id));
     // this.memoRowFacade.isAnswerDisplayed$.next(false);
     // this.memoRowFacade.setShown(this.memoRow.id);
   };
 
   const showAnswer = (): void => {
-    changeIsAnswerDisplayed(true);
+    changeAnswerDisplayed(true);
+    // this.memoRowFacade.isAnswerDisplayed$.next(true);
+    // if (this.rowsLeftCount == 0) {
+    //   this.toastr.success("Congrats that's all");
+    // }
+  };
+
+  const reset = (): void => {
+    dispatch(resetMemoRows());
     // this.memoRowFacade.isAnswerDisplayed$.next(true);
     // if (this.rowsLeftCount == 0) {
     //   this.toastr.success("Congrats that's all");
@@ -42,10 +55,21 @@ export function WorkspaceControls({
 
   return (
     <div>
+      <br />
       <button onClick={showNext}>Next Word</button>
       <br />
-      <br />
       <button onClick={showAnswer}>Show Answer</button>
+      <br />
+      <button onClick={reset}>Repeat Again</button>
+      <br />
+      <input
+        type="checkbox"
+        name="isTranslationByDefault"
+        checked={isTranslationByDefault}
+        onChange={(event) => changeTranslationByDefault(event.target.checked)}
+      />
+      Translation by default
+      <br />
     </div>
   );
 }

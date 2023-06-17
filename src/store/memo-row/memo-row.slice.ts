@@ -17,15 +17,18 @@ export const themeSlice = createSlice({
   name: 'memoRow',
   initialState,
   reducers: {
-    fetchMemoRows: (state, action: PayloadAction<MemoFile>) => {
-      state.memoRows = [];
+    fetchMemoRows: (currentSlice, action: PayloadAction<MemoFile>) => {
+      currentSlice.memoRows = [];
     },
-    fetchMemoRowsFulfilled: (state, action: PayloadAction<MemoRow[]>) => {
+    fetchMemoRowsFulfilled: (
+      currentSlice,
+      action: PayloadAction<MemoRow[]>
+    ) => {
       const { payload } = action;
-      state.memoRows = payload;
+      currentSlice.memoRows = payload;
     },
     setMemoRowsSelection: (
-      state,
+      currentSlice,
       action: PayloadAction<{
         selectedRowsIndexes: number[];
         withFlag: boolean;
@@ -33,7 +36,7 @@ export const themeSlice = createSlice({
     ) => {
       const { selectedRowsIndexes, withFlag } = action.payload;
 
-      state.memoRows = state.memoRows.map((memoRow) => ({
+      currentSlice.memoRows = currentSlice.memoRows.map((memoRow) => ({
         ...memoRow,
         isShown: false,
         isSelected:
@@ -41,13 +44,19 @@ export const themeSlice = createSlice({
           (!withFlag || !!memoRow.flag),
       }));
     },
-    setShownMemoRowId: (state, action: PayloadAction<number>) => {
+    setShownMemoRowId: (currentSlice, action: PayloadAction<number>) => {
       const { payload } = action;
 
-      state.memoRows[payload] = {
-        ...state.memoRows[payload],
+      currentSlice.memoRows[payload] = {
+        ...currentSlice.memoRows[payload],
         isShown: true,
       };
+    },
+    resetMemoRows: (currentSlice) => {
+      currentSlice.memoRows = currentSlice.memoRows.map((memoRow) => ({
+        ...memoRow,
+        isShown: false,
+      }));
     },
   },
 });
@@ -57,6 +66,7 @@ export const {
   fetchMemoRowsFulfilled,
   setMemoRowsSelection,
   setShownMemoRowId,
+  resetMemoRows,
 } = themeSlice.actions;
 
 export default themeSlice.reducer;

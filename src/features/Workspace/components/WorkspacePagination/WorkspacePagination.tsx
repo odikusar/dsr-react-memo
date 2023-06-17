@@ -1,5 +1,5 @@
-import { ROWS_PER_PAGE } from 'constants/index';
-import { useEffect, useState } from 'react';
+import { DEDUCTION_COEFFICIENT, ROWS_PER_PAGE } from 'constants/index';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAppDispatch } from 'store';
 import { setMemoRowsSelection } from 'store/memo-row/memo-row.slice';
@@ -27,9 +27,13 @@ export function WorkspacePagination({
   // const watchShowAge = watch('showAge', false); // you can supply default value as second argument
   // const watchAllFields = watch(); // when pass nothing as argument, you are watching everything
 
-  let [pages, setPages] = useState<boolean[]>([]);
-  let [checkAllPages, setCheckAllPages] = useState<boolean>(true);
+  const [pages, setPages] = useState<boolean[]>([]);
+  const [checkAllPages, setCheckAllPages] = useState<boolean>(true);
   let [withFlag, setWithFlag] = useState<boolean>(false);
+  // const [fromRowValue, setFromRowValue] = useState<number>(1);
+  // const [toRowValue, setToRowValue] = useState<number>(1);
+  const refFromRow = useRef<HTMLInputElement>(null);
+  const refToRow = useRef<HTMLInputElement>(null);
 
   const getPagesCount = (): number => {
     return !rowsTotalCount || rowsTotalCount < ROWS_PER_PAGE
@@ -37,10 +41,8 @@ export function WorkspacePagination({
       : Math.ceil(rowsTotalCount / ROWS_PER_PAGE);
   };
 
-  const onFormChange = () => {
+  const handlePagesChange = () => {
     if (pages && pages.length) {
-      // console.log(getValues());
-      // console.log(pages);
       const selectedPages = MemoService.getSelectedPages(pages);
 
       const boundaryIndexes = MemoService.getBoundaryRowsIndexes(
@@ -49,15 +51,24 @@ export function WorkspacePagination({
         ROWS_PER_PAGE
       );
 
-      const selectedRowsIndexes = MemoService.getSelectedRowsIndexes(
-        selectedPages,
-        boundaryIndexes.firstRowIndex, //formValue.from - 1,
-        boundaryIndexes.lastRowIndex, //formValue.to - 1,
-        ROWS_PER_PAGE
-      );
-      // console.log(selectedRowsIndexes);
-      dispatch(setMemoRowsSelection({ selectedRowsIndexes, withFlag }));
+      refFromRow.current.value = String(boundaryIndexes.firstRowIndex + 1);
+      refToRow.current.value = String(boundaryIndexes.lastRowIndex + 1);
+
+      sendSelection();
     }
+  };
+
+  const sendSelection = (): void => {
+    const selectedPages = MemoService.getSelectedPages(pages);
+
+    const selectedRowsIndexes = MemoService.getSelectedRowsIndexes(
+      selectedPages,
+      Number(refFromRow.current.value),
+      Number(refToRow.current.value),
+      ROWS_PER_PAGE
+    );
+
+    dispatch(setMemoRowsSelection({ selectedRowsIndexes, withFlag }));
   };
 
   const handlePageChange = (index: number, isChecked: boolean) => {
@@ -75,17 +86,12 @@ export function WorkspacePagination({
     withFlag = isChecked;
 
     setWithFlag(withFlag);
-    onFormChange();
+    handlePagesChange();
   };
 
   useEffect(() => {
-    onFormChange();
+    handlePagesChange();
   }, [pages]);
-
-  // useEffect(() => {
-  //   const subscription = watch(() => onFormChange());
-  //   return () => subscription.unsubscribe();
-  // }, [watch]);
 
   useEffect(() => {
     if (rowsTotalCount > 0) {
@@ -96,28 +102,34 @@ export function WorkspacePagination({
     }
   }, [rowsTotalCount]);
 
-  const rainbow = 'red orange yellow green blue indigo violet'.split(' ');
+  const addUpRows = (e: any) => {
+    e.preventDefault();
+    refFromRow.current.value = String(
+      Number(refFromRow.current.value) + DEDUCTION_COEFFICIENT
+    );
+
+    sendSelection();
+  };
+
+  const deductRows = (e: any) => {
+    e.preventDefault();
+    refToRow.current.value = String(
+      Number(refToRow.current.value) - DEDUCTION_COEFFICIENT
+    );
+
+    sendSelection();
+  };
 
   return (
     <div style={{ padding: '10px', margin: '10px', border: '1px solid white' }}>
       <div>
         words left: {rowsLeftCount || ''} current index: {currentMemoRowId + 1}
       </div>
-      <div>pages: {getPagesCount()}</div>
       <div>
         <form>
-          <input
-            type="checkbox"
-            checked={checkAllPages}
-            {...register('checkAllPages')}
-            onChange={(event) =>
-              handleCheckAllPagesChange(event.target.checked)
-            }
-          />
           {/* {watchShowAge && (
             <input type="number" {...register('age', { min: 50 })} />
           )} */}
-          <div></div>
           {pages.map((value, index) => (
             <label key={index}>
               <input
@@ -132,15 +144,40 @@ export function WorkspacePagination({
               {index + 1}
             </label>
           ))}
-          <br />
-          <br />
+          &nbsp;
           <input
             type="checkbox"
+            checked={checkAllPages}
+            {...register('checkAllPages')}
+            onChange={(event) =>
+              handleCheckAllPagesChange(event.target.checked)
+            }
+          />
+          ... &nbsp;
+          <input
+            type="checkbox"
+            name="withFlag"
             {...register('withFlag')}
             onChange={(event) => handleWithFlagChange(event.target.checked)}
-          />{' '}
+          />
           With Flag
           <br />
+          <button onClick={addUpRows}>+10</button>
+          <input
+            type="number"
+            name="from"
+            min={refFromRow?.current?.value}
+            ref={refFromRow}
+            onChange={sendSelection}
+          />
+          <input
+            type="number"
+            name="to"
+            max={refToRow?.current?.value}
+            ref={refToRow}
+            onChange={sendSelection}
+          />
+          <button onClick={deductRows}>-10</button>
           <br />
         </form>
       </div>
