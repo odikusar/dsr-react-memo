@@ -75,4 +75,26 @@ export class MemoService {
       []
     );
   }
+
+  static getPagesWithRows(
+    pages: number[] = [],
+    memoRowIds: number[],
+    rowsPerPage: number
+  ): number[] {
+    if (!pages.length || !memoRowIds.length) {
+      return [];
+    }
+
+    return pages.reduce(
+      (out, pageNumber) =>
+        memoRowIds.find(
+          (memoRowId) =>
+            memoRowId >= pageNumber * rowsPerPage &&
+            memoRowId < pageNumber * rowsPerPage + rowsPerPage - 1
+        ) !== undefined
+          ? out.concat(pageNumber)
+          : out,
+      []
+    );
+  }
 }

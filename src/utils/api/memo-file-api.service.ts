@@ -3,8 +3,11 @@ import {
   SnapshotOptions,
   addDoc,
   collection,
+  deleteDoc,
+  doc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 import { MemoFile } from 'models';
@@ -72,17 +75,16 @@ export class MemoFileApiService {
     } as MemoFile;
   }
 
-  // static async delete(noteId) {
-  //   deleteDoc(doc(FirebaseApp.db, "notes", noteId));
-  // }
-  // static async updateById(id, values) {
-  //   const query = doc(FirebaseApp.db, "notes", id);
-  //   await updateDoc(query, values);
-  //   return {
-  //     id,
-  //     ...values,
-  //   };
-  // }
+  static async delete(memoFileId: string): Promise<void> {
+    return deleteDoc(doc(FirebaseService.db, this.collectionName, memoFileId));
+  }
+
+  static async update(memoFile: MemoFile): Promise<MemoFile> {
+    const query = doc(FirebaseService.db, this.collectionName, memoFile.id);
+    await updateDoc(query, { ...memoFile });
+
+    return memoFile;
+  }
 
   // static async deleteById(noteId) {
   //   deleteDoc(doc(FirebaseApp.db, 'notes', noteId));

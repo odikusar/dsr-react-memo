@@ -5,6 +5,7 @@ import { updateUser } from 'store/auth/auth.middleware';
 import {
   selectActiveMemoFileId,
   selectCurrentUserId,
+  selectIsDemoUser,
   selectIsTranslationByDefault,
   selectUser,
 } from 'store/auth/auth.selectors';
@@ -33,6 +34,7 @@ export function WorkspaceFeature() {
   const allMemoRows = useAppSelector(selectMemoRows);
   const rowsLeftCount = useAppSelector(selectMemoRowsLeftCount);
   const user = useAppSelector(selectUser);
+  const isDemoUser = useAppSelector(selectIsDemoUser);
   const [memoRow, setMemoRow] = useState<MemoRow>(null);
   const [isAnswerDisplayed, setIsAnswerDisplayed] = useState<boolean>(false);
 
@@ -56,20 +58,18 @@ export function WorkspaceFeature() {
 
   return (
     <div>
-      <b>{activeMemoFileId}</b>
-      <br />
-      <b>{!!allMemoRows && allMemoRows.length}</b>
-      <br />
       <WorkspaceFiles
         activeMemoFileId={activeMemoFileId}
         memoFiles={memoFiles}
         currentUserId={currentUserId}
+        isDemoUser={isDemoUser}
       />
 
       <WorkspacePagination
         rowsTotalCount={allMemoRows?.length}
         currentMemoRowId={!!memoRow ? memoRow.id + 1 : 0}
         rowsLeftCount={rowsLeftCount}
+        memoRows={allMemoRows}
       />
 
       <WorkspaceCard

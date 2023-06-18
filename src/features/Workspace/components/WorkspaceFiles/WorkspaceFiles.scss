@@ -1,2 +1,24 @@
-.container {
+.dsr-files {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+  padding-top: 10px;
+}
+
+.dsr-files-add {
+  &__icon {
+    cursor: pointer;
+  }
+}
+
+.dsr-file-wrap {
+  overflow: hidden;
+
+  &_active {
+    border: 1px dashed;
+    border-radius: 8px;
+  }
 }

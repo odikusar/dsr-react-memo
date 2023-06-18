@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { MemoFile } from 'models';
-import { createMemoFile, fetchMemoFiles } from './memo-file.middleware';
+import {
+  createMemoFile,
+  deleteMemoFile,
+  fetchMemoFiles,
+  updateMemoFile,
+} from './memo-file.middleware';
 
 interface MemoFileState {
   memoFiles: MemoFile[];
@@ -41,6 +46,19 @@ const memoFileSlice = createSlice({
       .addCase(createMemoFile.fulfilled, (currentSlice, action) => {
         currentSlice.isLoading = false;
         currentSlice.memoFiles.push(action.payload);
+      })
+      .addCase(updateMemoFile.fulfilled, (currentSlice, action) => {
+        currentSlice.isLoading = false;
+        const index = currentSlice.memoFiles.findIndex(
+          (memoFile) => memoFile.id === action.payload.id
+        );
+        currentSlice.memoFiles[index] = action.payload;
+      })
+      .addCase(deleteMemoFile.fulfilled, (currentSlice, action) => {
+        currentSlice.isLoading = false;
+        currentSlice.memoFiles = currentSlice.memoFiles.filter(
+          (memoFile) => memoFile.id !== action.payload.id
+        );
       });
   },
 });

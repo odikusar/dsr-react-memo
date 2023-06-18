@@ -22,3 +22,8 @@ export const selectUser = createSelector(
   selectAuth,
   (selectAuth) => selectAuth.user
 );
+
+export const selectIsDemoUser = createSelector(
+  selectUser,
+  (selectUser) => selectUser.isDemo
+);

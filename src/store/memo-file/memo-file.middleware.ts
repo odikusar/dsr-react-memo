@@ -35,7 +35,26 @@ export const createMemoFile = createAsyncThunk(
   'memoFile/create',
   async (memoFile: MemoFile) => {
     const response = await MemoFileApiService.create(memoFile);
+
     return response;
+  }
+);
+
+export const updateMemoFile = createAsyncThunk(
+  'memoFile/update',
+  async (memoFile: MemoFile) => {
+    const response = await MemoFileApiService.update(memoFile);
+
+    return response;
+  }
+);
+
+export const deleteMemoFile = createAsyncThunk(
+  'memoFile/delete',
+  async (memoFile: MemoFile) => {
+    await MemoFileApiService.delete(memoFile.id);
+
+    return memoFile;
   }
 );
 

@@ -1,4 +1,5 @@
 import {
+  deleteObject,
   getDownloadURL,
   getStorage,
   ref,
@@ -29,14 +30,19 @@ export class FileService {
         (error) => {
           reject(error);
         },
-        () =>
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        () => {
+          if (!!memoFile) {
+            this.delete(memoFile);
+          }
+
+          return getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             resolve({
               name: fileName,
               initialName: file.name,
               url: downloadURL,
             });
-          })
+          });
+        }
       );
     });
     // return uploadTask.snapshotChanges().pipe(
@@ -103,14 +109,12 @@ export class FileService {
   //   );
   // }
 
-  // delete(memoFile: MemoFile): void {
-  //   this.memoFileFacade.delete(memoFile.id);
-  //   this.erase(memoFile.name).pipe(take(1)).subscribe();
-  // }
-
-  // erase(fileName: string): Observable<any> {
-  //   return this.storage.ref(this.basePath).child(fileName).delete();
-  // }
+  static delete(memoFile: MemoFile): Promise<void> {
+    const storage = getStorage(FirebaseService.firebaseApp);
+    const filePath = this.getFilePath(memoFile.name);
+    const storageRef = ref(storage, filePath);
+    return deleteObject(storageRef);
+  }
 
   private static getFilePath(fileName: string): string {
     return `${this.basePath}/${fileName}`;

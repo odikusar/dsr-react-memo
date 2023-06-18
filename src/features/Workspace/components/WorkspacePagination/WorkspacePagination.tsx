@@ -1,4 +1,5 @@
 import { DEDUCTION_COEFFICIENT, ROWS_PER_PAGE } from 'constants/index';
+import { MemoRow } from 'models';
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAppDispatch } from 'store';
@@ -10,10 +11,12 @@ export function WorkspacePagination({
   rowsTotalCount,
   currentMemoRowId,
   rowsLeftCount,
+  memoRows,
 }: {
   rowsTotalCount: number;
   currentMemoRowId: number;
   rowsLeftCount: number;
+  memoRows: MemoRow[];
 }) {
   const dispatch = useAppDispatch();
   const {
@@ -27,13 +30,32 @@ export function WorkspacePagination({
   // const watchShowAge = watch('showAge', false); // you can supply default value as second argument
   // const watchAllFields = watch(); // when pass nothing as argument, you are watching everything
 
-  const [pages, setPages] = useState<boolean[]>([]);
   const [checkAllPages, setCheckAllPages] = useState<boolean>(true);
+  const refFromRow = useRef<HTMLInputElement>(null);
+  const refToRow = useRef<HTMLInputElement>(null);
+  let [pages, setPages] = useState<boolean[]>([]);
   let [withFlag, setWithFlag] = useState<boolean>(false);
   // const [fromRowValue, setFromRowValue] = useState<number>(1);
   // const [toRowValue, setToRowValue] = useState<number>(1);
-  const refFromRow = useRef<HTMLInputElement>(null);
-  const refToRow = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    handlePagesChange();
+  }, [pages]);
+
+  useEffect(() => {
+    if (rowsTotalCount > 0) {
+      pages = new Array(getPagesCount()).fill(true);
+      setPages(pages);
+
+      if (withFlag) {
+        handleWithFlagChange(withFlag);
+      }
+
+      if (!pages.find((isSelected) => !isSelected)) {
+        setCheckAllPages(true);
+      }
+    }
+  }, [rowsTotalCount]);
 
   const getPagesCount = (): number => {
     return !rowsTotalCount || rowsTotalCount < ROWS_PER_PAGE
@@ -84,23 +106,27 @@ export function WorkspacePagination({
 
   const handleWithFlagChange = (isChecked: boolean) => {
     withFlag = isChecked;
+    setWithFlag(isChecked);
 
-    setWithFlag(withFlag);
+    const flaggedMemoRowIds = memoRows
+      .filter((memoRow) => !!memoRow.flag)
+      .map((memoRow) => memoRow.id);
+
+    const pagesWithRows = MemoService.getPagesWithRows(
+      MemoService.getSelectedPages(pages),
+      flaggedMemoRowIds,
+      ROWS_PER_PAGE
+    );
+
+    pages = pages.map((value, id) => pagesWithRows.indexOf(id) !== -1);
+    setPages(pages);
+
+    if (pagesWithRows.length !== pages.length) {
+      setCheckAllPages(false);
+    }
+
     handlePagesChange();
   };
-
-  useEffect(() => {
-    handlePagesChange();
-  }, [pages]);
-
-  useEffect(() => {
-    if (rowsTotalCount > 0) {
-      setPages(new Array(getPagesCount()).fill(true));
-
-      // console.info(pages);
-      // console.info(rowsTotalCount);
-    }
-  }, [rowsTotalCount]);
 
   const addUpRows = (e: any) => {
     e.preventDefault();
@@ -127,9 +153,6 @@ export function WorkspacePagination({
       </div>
       <div>
         <form>
-          {/* {watchShowAge && (
-            <input type="number" {...register('age', { min: 50 })} />
-          )} */}
           {pages.map((value, index) => (
             <label key={index}>
               <input
