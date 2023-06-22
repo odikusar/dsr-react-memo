@@ -1,6 +1,6 @@
 # Oleg Dikusar demo React Web App.
 
-[Click here for the demo](https://memo-dsr.web.app/)
+[Click here for the Live Demo](https://memo-dsr.web.app/)
 
 ## Stack:
 
