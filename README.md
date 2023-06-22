@@ -1,4 +1,19 @@
-# Getting Started with Create React App
+# Oleg Dikusar demo React Web App.
+
+[Click here for the demo](https://memo-dsr.web.app/)
+
+## Stack:
+
+- React 18, TypeScript, HOC, React Hooks
+- Redux, Redux Thunk
+- React Hook Form
+- Material UI (MUI) + theming
+- Unit Tests, Component Tests
+- Firebase, Authentication, FireStorage, FireHosting
+
+Screenshot:
+
+<img src="https://dsr-lang.web.app/assets/images/app-memo.jpg"  width="300">
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
