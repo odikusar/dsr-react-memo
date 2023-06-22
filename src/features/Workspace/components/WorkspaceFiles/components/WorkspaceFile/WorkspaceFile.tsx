@@ -31,7 +31,7 @@ export function WorkspaceFile({
 
   return (
     <>
-      <div className="dsr-file">
+      <div className="dsr-file" data-testid="workspaceFileWrapper">
         <div
           className={classNames('dsr-link-btn', 'dsr-file__body', {
             'dsr-file__body_active': isActive,

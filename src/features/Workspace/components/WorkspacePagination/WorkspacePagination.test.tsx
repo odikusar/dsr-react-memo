@@ -5,11 +5,11 @@ import { AnyAction, Store } from 'redux';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { initialTestState } from 'store/test-state';
-import { Header } from './Header';
+import { WorkspacePagination } from './WorkspacePagination';
 
 const middlewares = [thunk];
 
-describe('<Header/>', () => {
+describe('<WorkspacePagination/>', () => {
   let store: Store<unknown, AnyAction>;
 
   beforeAll(() => {
@@ -17,28 +17,26 @@ describe('<Header/>', () => {
     store = mockStore(initialTestState);
   });
 
-  it('should render header with title', () => {
+  it('should render panel with labels', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <Header />
+          <WorkspacePagination
+            rowsTotalCount={10}
+            currentMemoRowId={1}
+            rowsLeftCount={1}
+            memoRows={[]}
+          />
         </BrowserRouter>
       </Provider>
     );
 
-    expect(screen.getByTestId('headerToolbar')).toHaveTextContent(
-      'Dikusar React App'
+    expect(screen.getByTestId('pagesTopPanel')).toHaveTextContent(
+      'words left:'
     );
-  });
-
-  it('should render link to How to use page', () => {
-    render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <Header />
-        </BrowserRouter>
-      </Provider>
+    expect(screen.getByTestId('pagesTopPanel')).toHaveTextContent(
+      'current index:'
     );
-    expect(screen.getByTestId('headerToolbar')).toHaveTextContent('How to use');
+    expect(screen.getByTestId('pagesTopPanel')).toHaveTextContent('with flag');
   });
 });

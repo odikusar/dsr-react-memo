@@ -22,7 +22,7 @@ type SignInFormData = {
   password: string;
 };
 
-const LoginFeature = () => {
+export function LoginFeature() {
   const {
     handleSubmit,
     register,
@@ -50,7 +50,7 @@ const LoginFeature = () => {
   }
 
   return (
-    <div className="dsr-login-page">
+    <div className="dsr-login-page" data-testid="loginPage">
       <Box sx={{ minWidth: 400, maxWidth: '80%' }}>
         <Card>
           <form onSubmit={onSubmit}>
@@ -59,6 +59,7 @@ const LoginFeature = () => {
                 Sign in
               </Typography>
               <TextField
+                data-testid="loginPageEmail"
                 label="Email"
                 type="email"
                 required
@@ -68,6 +69,7 @@ const LoginFeature = () => {
               {errors.email && <span>This field is required</span>}
               <Box sx={{ mt: 3 }}>
                 <TextField
+                  data-testid="loginPagePassword"
                   label="Password"
                   type="password"
                   required
@@ -92,6 +94,6 @@ const LoginFeature = () => {
       </Box>
     </div>
   );
-};
+}
 
 export default LoginFeature;

@@ -5,7 +5,7 @@ import './About.scss';
 
 export function AboutFeature() {
   return (
-    <div className="dsr-about-content">
+    <div className="dsr-about-content" data-testid="aboutPage">
       <p>
         This application helps to work with custom dictionary files in CSV
         format. For learning foreign words.

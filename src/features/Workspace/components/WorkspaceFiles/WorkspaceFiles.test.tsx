@@ -3,20 +3,25 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { initialTestState } from 'store/test-state';
-import { App } from './App';
+import { WorkspaceFiles } from './WorkspaceFiles';
 
 const middlewares = [thunk];
 
-describe('<App/>', () => {
+describe('<WorkspaceFiles/>', () => {
   it('contains Main Wrapper', () => {
     const mockStore = configureStore(middlewares);
     let store = mockStore(initialTestState);
 
     render(
       <Provider store={store}>
-        <App />
+        <WorkspaceFiles
+          activeMemoFileId={null}
+          memoFiles={[]}
+          currentUserId={null}
+          isDemoUser={true}
+        />
       </Provider>
     );
-    expect(screen.getAllByTestId('mainWrapper')).toBeTruthy();
+    expect(screen.getAllByTestId('workspaceFilesWrapper')).toBeTruthy();
   });
 });

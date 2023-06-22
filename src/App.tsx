@@ -1,4 +1,5 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
+import { PageNotFoundFeature } from 'features/PageNotFound/PageNotFound';
 import { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { initializeAuth } from 'store/auth/auth.middleware';
@@ -62,6 +63,7 @@ export function App() {
               <Route element={<AuthOnly />}>
                 <Route path="/" element={<WorkspaceFeature />} />
               </Route>
+              <Route path="*" element={<PageNotFoundFeature />} />
             </Routes>
           </div>
         </div>

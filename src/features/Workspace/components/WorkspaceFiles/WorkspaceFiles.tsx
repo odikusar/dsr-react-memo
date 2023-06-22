@@ -78,7 +78,7 @@ export function WorkspaceFiles({
   };
 
   return (
-    <div className="dsr-files">
+    <div className="dsr-files" data-testid="workspaceFilesWrapper">
       <div className="dsr-files-add dsr-file-wrap dsr-hide-for-small">
         <input
           className="dsr-hide"

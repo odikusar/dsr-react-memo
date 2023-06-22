@@ -13,13 +13,13 @@ export function WorkspaceCard({
   return (
     <div className="dsr-card-wrapper">
       <div className="dsr-card">
-        <div className="dsr-card-word">
+        <div className="dsr-card-word" data-testid="cardWord">
           {(!isTranslationByDefault || isAnswerDisplayed) && (
             <span>{memoRow?.word}</span>
           )}
         </div>
         <hr />
-        <div className="dsr-card-word">
+        <div className="dsr-card-word" data-testid="cardTranslate">
           {(isTranslationByDefault || isAnswerDisplayed) && (
             <span>{memoRow?.translate}</span>
           )}

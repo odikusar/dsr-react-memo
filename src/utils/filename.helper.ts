@@ -1,6 +1,8 @@
 import { FILENAME_LENGTH } from 'constants/index';
 
 export function getFileName(initialFileName: string): string {
+  if (!initialFileName) return '';
+
   return removeExtension(initialFileName).slice(0, FILENAME_LENGTH);
 }
 

@@ -146,7 +146,7 @@ export function WorkspacePagination({
 
   return (
     <>
-      <Box className="dsr-pages-top-panel">
+      <Box className="dsr-pages-top-panel" data-testid="pagesTopPanel">
         <div>words left:</div>
         <div className="dsr-pages-counter dsr-pages-counter_first">
           {rowsLeftCount || ''}

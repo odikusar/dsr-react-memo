@@ -5,11 +5,11 @@ import { AnyAction, Store } from 'redux';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { initialTestState } from 'store/test-state';
-import { Header } from './Header';
+import { LoginFeature } from './Login';
 
 const middlewares = [thunk];
 
-describe('<Header/>', () => {
+describe('<LoginFeature/>', () => {
   let store: Store<unknown, AnyAction>;
 
   beforeAll(() => {
@@ -17,28 +17,41 @@ describe('<Header/>', () => {
     store = mockStore(initialTestState);
   });
 
-  it('should render header with title', () => {
+  it('should render Sign in title', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <Header />
+          <LoginFeature />
         </BrowserRouter>
       </Provider>
     );
 
-    expect(screen.getByTestId('headerToolbar')).toHaveTextContent(
-      'Dikusar React App'
-    );
+    expect(screen.getByTestId('loginPage')).toHaveTextContent('Sign in');
   });
 
-  it('should render link to How to use page', () => {
+  it('should render form input with Email label', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <Header />
+          <LoginFeature />
         </BrowserRouter>
       </Provider>
     );
-    expect(screen.getByTestId('headerToolbar')).toHaveTextContent('How to use');
+
+    expect(screen.getByTestId('loginPageEmail')).toHaveTextContent('Email');
+  });
+
+  it('should render form input with Password label', () => {
+    render(
+      <Provider store={store}>
+        <BrowserRouter>
+          <LoginFeature />
+        </BrowserRouter>
+      </Provider>
+    );
+
+    expect(screen.getByTestId('loginPagePassword')).toHaveTextContent(
+      'Password'
+    );
   });
 });

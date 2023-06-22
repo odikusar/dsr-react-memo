@@ -5,11 +5,11 @@ import { AnyAction, Store } from 'redux';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import { initialTestState } from 'store/test-state';
-import { Header } from './Header';
+import { PageNotFoundFeature } from './PageNotFound';
 
 const middlewares = [thunk];
 
-describe('<Header/>', () => {
+describe('<PageNotFoundFeature/>', () => {
   let store: Store<unknown, AnyAction>;
 
   beforeAll(() => {
@@ -17,28 +17,17 @@ describe('<Header/>', () => {
     store = mockStore(initialTestState);
   });
 
-  it('should render header with title', () => {
+  it('should render sorry text', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <Header />
+          <PageNotFoundFeature />
         </BrowserRouter>
       </Provider>
     );
 
-    expect(screen.getByTestId('headerToolbar')).toHaveTextContent(
-      'Dikusar React App'
+    expect(screen.getByTestId('sorryText')).toHaveTextContent(
+      'Sorry, page not found'
     );
-  });
-
-  it('should render link to How to use page', () => {
-    render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <Header />
-        </BrowserRouter>
-      </Provider>
-    );
-    expect(screen.getByTestId('headerToolbar')).toHaveTextContent('How to use');
   });
 });

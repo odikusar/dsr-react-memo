@@ -71,7 +71,7 @@ export function WorkspaceControls({
 
   return (
     <>
-      <Box className="dsr-control-row">
+      <Box className="dsr-control-row" data-testid="topLevelControls">
         <Button
           className="dsr-control-btn dsr-link-btn"
           variant="outlined"
@@ -87,7 +87,7 @@ export function WorkspaceControls({
           Next Word
         </Button>
       </Box>
-      <Box className="dsr-control-row">
+      <Box className="dsr-control-row" data-testid="middleLevelControls">
         <FormControlLabel
           control={
             <Checkbox
@@ -109,7 +109,7 @@ export function WorkspaceControls({
           Repeat Again
         </Button>
       </Box>
-      <Box className="dsr-control-row">
+      <Box className="dsr-control-row" data-testid="bottomLevelControls">
         <Button
           variant="outlined"
           className="dsr-control-btn dsr-link-btn"

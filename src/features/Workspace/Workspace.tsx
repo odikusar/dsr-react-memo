@@ -55,7 +55,7 @@ export function WorkspaceFeature() {
   };
 
   return (
-    <div>
+    <div data-testid="workspaceWrapper">
       <WorkspaceFiles
         activeMemoFileId={activeMemoFileId}
         memoFiles={memoFiles}

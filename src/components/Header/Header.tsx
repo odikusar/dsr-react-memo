@@ -28,7 +28,7 @@ export function Header(): JSX.Element {
   };
 
   return (
-    <div className="dsr-header-toolbar">
+    <div className="dsr-header-toolbar" data-testid="headerToolbar">
       <div className="dsr-header-toolbar__content">
         <div className="dsr-header-toolbar__title dsr-hide-for-small dsr-header-title">
           Dikusar React App.
