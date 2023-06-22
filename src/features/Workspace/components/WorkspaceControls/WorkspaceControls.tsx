@@ -1,4 +1,11 @@
+import { Box, Button, Checkbox, FormControlLabel } from '@mui/material';
+import {
+  DICTIONARY_LINK,
+  EXPLANATION_LINK,
+  GOOGLE_IMAGE_LINK,
+} from 'constants/index';
 import { MemoRow } from 'models';
+import { toast } from 'react-toastify';
 import { useAppDispatch } from 'store';
 import {
   resetMemoRows,
@@ -21,55 +28,112 @@ export function WorkspaceControls({
 }) {
   const dispatch = useAppDispatch();
 
-  // const { memoFiles } = props;
-
-  // @Input() memoRow: MemoRow;
-  // @Input() isPreviousMemoRowReady: boolean;
-  // @Input() isTranslationByDefault: boolean;
-  // @Input() rowsLeftCount: number;
-
-  // setShownMemoRowId
-
   const showNext = (): void => {
+    if (!rowsLeftCount) {
+      return;
+    }
+
     changeAnswerDisplayed(false);
     dispatch(setShownMemoRowId(memoRow.id));
-    // this.memoRowFacade.isAnswerDisplayed$.next(false);
-    // this.memoRowFacade.setShown(this.memoRow.id);
   };
 
   const showAnswer = (): void => {
     changeAnswerDisplayed(true);
-    // this.memoRowFacade.isAnswerDisplayed$.next(true);
-    // if (this.rowsLeftCount == 0) {
-    //   this.toastr.success("Congrats that's all");
-    // }
+
+    if (rowsLeftCount <= 1) {
+      toast.success("Congrats that's all");
+    }
   };
 
   const reset = (): void => {
     dispatch(resetMemoRows());
-    // this.memoRowFacade.isAnswerDisplayed$.next(true);
-    // if (this.rowsLeftCount == 0) {
-    //   this.toastr.success("Congrats that's all");
-    // }
+    changeAnswerDisplayed(false);
+  };
+
+  const openDictionary = (): void => {
+    openInNewTab(`${DICTIONARY_LINK}${memoRow.word}`);
+  };
+
+  const openExplanation = (): void => {
+    openInNewTab(`${EXPLANATION_LINK}${memoRow.word}`);
+  };
+
+  const openImage = (): void => {
+    openInNewTab(`${GOOGLE_IMAGE_LINK}${memoRow.word}`);
+  };
+
+  const openInNewTab = (href: string): void => {
+    Object.assign(document.createElement('a'), {
+      target: '_blank',
+      href,
+    }).click();
   };
 
   return (
-    <div>
-      <br />
-      <button onClick={showNext}>Next Word</button>
-      <br />
-      <button onClick={showAnswer}>Show Answer</button>
-      <br />
-      <button onClick={reset}>Repeat Again</button>
-      <br />
-      <input
-        type="checkbox"
-        name="isTranslationByDefault"
-        checked={isTranslationByDefault}
-        onChange={(event) => changeTranslationByDefault(event.target.checked)}
-      />
-      Translation by default
-      <br />
-    </div>
+    <>
+      <Box className="dsr-control-row">
+        <Button
+          className="dsr-control-btn dsr-link-btn"
+          variant="outlined"
+          onClick={showAnswer}
+        >
+          Show Answer
+        </Button>
+        <Button
+          className="dsr-control-btn dsr-link-btn dsr-control-btn__next"
+          variant="outlined"
+          onClick={showNext}
+        >
+          Next Word
+        </Button>
+      </Box>
+      <Box className="dsr-control-row">
+        <FormControlLabel
+          control={
+            <Checkbox
+              name="isTranslationByDefault"
+              checked={isTranslationByDefault}
+              onChange={(event) =>
+                changeTranslationByDefault(event.target.checked)
+              }
+              color="primary"
+            />
+          }
+          label="Translation by default"
+        />
+        <Button
+          className="dsr-control-btn dsr-link-btn"
+          variant="outlined"
+          onClick={reset}
+        >
+          Repeat Again
+        </Button>
+      </Box>
+      <Box className="dsr-control-row">
+        <Button
+          variant="outlined"
+          className="dsr-control-btn dsr-link-btn"
+          onClick={openImage}
+        >
+          Google Image
+        </Button>
+
+        <Button
+          variant="outlined"
+          className="dsr-control-btn dsr-link-btn"
+          onClick={openExplanation}
+        >
+          Explanation
+        </Button>
+
+        <Button
+          variant="outlined"
+          className="dsr-control-btn dsr-link-btn"
+          onClick={openDictionary}
+        >
+          Dictionary
+        </Button>
+      </Box>
+    </>
   );
 }

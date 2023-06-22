@@ -1,5 +1,5 @@
 import { MemoRow } from 'models';
-import { RandomNumberService } from './random-number.service';
+import { getRandomNumber } from './random-number.helper';
 
 interface BoundaryIndexes {
   firstRowIndex: number;
@@ -56,7 +56,7 @@ export class MemoService {
     let randomMemoRow: MemoRow = null;
 
     do {
-      randomMemoRowId = RandomNumberService.get(
+      randomMemoRowId = getRandomNumber(
         memoRows[0].id,
         memoRows[memoRows.length - 1].id
       );

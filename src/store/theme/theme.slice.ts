@@ -16,10 +16,6 @@ export const themeSlice = createSlice({
     toggleTheme: (currentSlice) => {
       currentSlice.isDarkTheme = !currentSlice.isDarkTheme;
     },
-    // save: (state, param) => {
-    //   const { payload } = param;
-    //   state.location = [...state.location, payload];
-    // },
   },
 });
 

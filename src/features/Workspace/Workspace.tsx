@@ -17,7 +17,6 @@ import {
   selectMemoRowsLeftCount,
 } from 'store/memo-row/memo-row.selectors';
 import { MemoService } from 'utils/memo.service';
-import './Workspace.scss';
 import { WorkspaceCard } from './components/WorkspaceCard/WorkspaceCard';
 import { WorkspaceControls } from './components/WorkspaceControls/WorkspaceControls';
 import { WorkspaceFiles } from './components/WorkspaceFiles/WorkspaceFiles';
@@ -25,7 +24,6 @@ import { WorkspacePagination } from './components/WorkspacePagination/WorkspaceP
 
 export function WorkspaceFeature() {
   const dispatch = useAppDispatch();
-
   const memoFiles = useAppSelector(selectMemoFiles);
   const currentUserId = useAppSelector(selectCurrentUserId);
   const activeMemoFileId = useAppSelector(selectActiveMemoFileId);
@@ -40,7 +38,7 @@ export function WorkspaceFeature() {
 
   useEffect(() => {
     dispatch(fetchMemoFiles(currentUserId));
-  }, []);
+  }, [dispatch, currentUserId]);
 
   useEffect(() => {
     if (selectedFreshMemoRows && selectedFreshMemoRows.length) {
@@ -64,20 +62,19 @@ export function WorkspaceFeature() {
         currentUserId={currentUserId}
         isDemoUser={isDemoUser}
       />
-
+      <hr />
       <WorkspacePagination
         rowsTotalCount={allMemoRows?.length}
         currentMemoRowId={!!memoRow ? memoRow.id + 1 : 0}
         rowsLeftCount={rowsLeftCount}
         memoRows={allMemoRows}
       />
-
+      <hr />
       <WorkspaceCard
         memoRow={memoRow}
         isAnswerDisplayed={isAnswerDisplayed}
         isTranslationByDefault={isTranslationByDefault}
       />
-
       <WorkspaceControls
         memoRow={memoRow}
         rowsLeftCount={rowsLeftCount}

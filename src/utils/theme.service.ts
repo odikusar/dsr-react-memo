@@ -1,5 +1,14 @@
 import { createTheme } from '@mui/material';
-import { IS_DARK_THEME_BY_DEFAULT, THEME_FLAG } from 'constants/index';
+import {
+  COLOR_DARK_BG,
+  COLOR_DARK_PRIMARY,
+  COLOR_DARK_SECONDARY,
+  COLOR_LIGHT_BG,
+  COLOR_LIGHT_PRIMARY,
+  COLOR_LIGHT_SECONDARY,
+  IS_DARK_THEME_BY_DEFAULT,
+  THEME_FLAG,
+} from 'constants/index';
 
 export class ThemeService {
   static toggleTheme(): void {
@@ -15,17 +24,16 @@ export class ThemeService {
   }
 
   static readonly darkTheme = createTheme({
-    /// Move colors to constants !!!
     palette: {
       mode: 'dark',
       background: {
-        default: '#424242',
+        default: COLOR_DARK_BG,
       },
       primary: {
-        main: '#fff',
+        main: COLOR_DARK_PRIMARY,
       },
       secondary: {
-        main: '#fff',
+        main: COLOR_DARK_SECONDARY,
       },
     },
   });
@@ -34,13 +42,13 @@ export class ThemeService {
     palette: {
       mode: 'light',
       background: {
-        default: '#eee8e8',
+        default: COLOR_LIGHT_BG,
       },
       primary: {
-        main: '#2d2b2bde',
+        main: COLOR_LIGHT_PRIMARY,
       },
       secondary: {
-        main: '#2d2b2bde',
+        main: COLOR_LIGHT_SECONDARY,
       },
     },
   });

@@ -1,4 +1,3 @@
-// import { useSelector } from "react-redux";
 import { Navigate, useOutlet } from 'react-router-dom';
 import { useAppSelector } from 'store';
 import { selectAuth } from 'store/auth/auth.selectors';

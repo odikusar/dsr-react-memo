@@ -30,17 +30,6 @@ const genericConverter = <T>() => ({
 export class MemoFileApiService {
   static readonly collectionName: string = 'memoFiles';
 
-  // static async create(formValues) {
-  //   const response = await addDoc(
-  //     collection(FirebaseService.db, 'notes'),
-  //     formValues
-  //   );
-  //   return {
-  //     id: response.id,
-  //     ...formValues,
-  //   };
-  // }
-
   static async fetchAll(userId: string): Promise<MemoFile[]> {
     const snapshot = await getDocs(
       query(
@@ -50,10 +39,7 @@ export class MemoFileApiService {
         where('userId', '==', userId)
       )
     );
-    // query(
-    //   collection(FirebaseApp.db, "notes"),
-    //   orderBy("created_at", "asc")
-    // );
+
     let items: MemoFile[] = [];
 
     snapshot.forEach((item) => {
@@ -85,39 +71,4 @@ export class MemoFileApiService {
 
     return memoFile;
   }
-
-  // static async deleteById(noteId) {
-  //   deleteDoc(doc(FirebaseApp.db, 'notes', noteId));
-  // }
-  // static async updateById(id, values) {
-  //   const query = doc(FirebaseApp.db, 'notes', id);
-  //   await updateDoc(query, values);
-  //   return {
-  //     id,
-  //     ...values,
-  //   };
-  // }
-
-  // static async signIn(email: string, password: string): Promise<User> {
-  //   const response = await signInWithEmailAndPassword(
-  //     FirebaseService.auth,
-  //     email,
-  //     password
-  //   );
-
-  //   return response.user;
-  // }
-
-  // static async signOut(): Promise<void> {
-  //   return signOut(FirebaseService.auth);
-  // }
-
-  // static async loadUser(
-  //   userId: string
-  // ): Promise<DocumentSnapshot<UserProfile>> {
-  //   const docRef = doc(FirebaseService.db, 'users', userId).withConverter(
-  //     this.userConverter
-  //   );
-  //   return getDoc(docRef);
-  // }
 }

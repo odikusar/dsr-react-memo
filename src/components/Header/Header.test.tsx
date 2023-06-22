@@ -1,13 +1,14 @@
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import { App } from './App';
+import { Header } from './Header';
 
 const middlewares = [thunk];
 
-describe('<App/>', () => {
-  it('contains Main Wrapper', () => {
+describe('<Header/>', () => {
+  it('contains Header', () => {
     const initialState: any = {
       auth: {
         user: null,
@@ -35,12 +36,14 @@ describe('<App/>', () => {
 
     render(
       <Provider store={store}>
-        <App />
+        <BrowserRouter>
+          <Header />
+        </BrowserRouter>
       </Provider>
     );
-    // const linkElement = screen.getByText(/Dikusar React App/i);
-    // expect(linkElement).toBeInTheDocument();
+    const testElement = screen.getByText(/Dikusar React App/i);
+    expect(testElement).toBeTruthy();
     // expect(screen.getAllByTestId('mainWrapper').length).toBe(1);
-    expect(screen.getAllByTestId('mainWrapper')).toBeTruthy();
+    // expect(screen.getAllByTestId('mainWrapper')).toBeTruthy();
   });
 });

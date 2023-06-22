@@ -8,7 +8,7 @@ import { store } from './store/store';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
-/* <StrictMode> </StrictMode> */
+
 root.render(
   <Provider store={store}>
     <App />

@@ -31,12 +31,13 @@ export function App() {
   if (!isInitialized) {
     return (
       <div
+        data-testid="mainWrapper"
         className={
           'dsr-main-wrapper ' +
           (isDarkTheme ? 'dsr-dark-theme' : 'dsr-light-theme')
         }
       >
-        <div className="dsr-main-spinner"></div>
+        <div className="dsr-main-spinner" data-testid="mainSpinner"></div>
       </div>
     );
   }

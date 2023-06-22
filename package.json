@@ -11,7 +11,6 @@
     "@mui/styled-engine-sc": "^5.12.0",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.34",
@@ -58,8 +57,11 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/react": "^14.0.0",
     "@types/react-redux": "^7.1.25",
     "@types/redux": "^3.6.0",
+    "@types/redux-mock-store": "^1.0.3",
+    "redux-mock-store": "^1.5.4",
     "sass": "^1.62.1"
   }
 }

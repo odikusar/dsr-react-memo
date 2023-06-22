@@ -1,2 +1,20 @@
-.container {
+.dsr-control-btn {
+  margin: 5px;
+
+  &__next {
+    width: 150px;
+  }
+}
+
+.dsr-next-btn {
+  min-width: 100px;
+}
+
+.dsr-control-row {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }

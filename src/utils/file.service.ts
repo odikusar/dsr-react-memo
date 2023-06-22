@@ -45,69 +45,7 @@ export class FileService {
         }
       );
     });
-    // return uploadTask.snapshotChanges().pipe(
-    //   finalize(() =>
-    //     this.storage
-    //       .ref(filePath)
-    //       .getDownloadURL()
-    //       .pipe(take(1))
-    //       .subscribe((downloadURL: string) => {
-    //         if (!!memoFile) {
-    //           this.memoFileFacade.update({
-    //             ...memoFile,
-    //             url: downloadURL,
-    //             name: fileName,
-    //             initialName: file.name,
-    //           });
-
-    //           this.erase(memoFile.name).pipe(take(1)).subscribe();
-    //         } else {
-    //           this.memoFileFacade.create({
-    //             url: downloadURL,
-    //             name: fileName,
-    //             initialName: file.name,
-    //             userId: this.userFacade.userId,
-    //           });
-    //         }
-    //       })
-    //   )
-    // );
   }
-
-  // upload(file: File, memoFile: MemoFile = null) {
-  //   /// type
-  //   const fileName = this.getRandomFileName(file.name);
-  //   const filePath = this.getFilePath(fileName);
-  //   const uploadTask = this.storage.upload(filePath, file);
-
-  //   return uploadTask.snapshotChanges().pipe(
-  //     finalize(() =>
-  //       this.storage
-  //         .ref(filePath)
-  //         .getDownloadURL()
-  //         .pipe(take(1))
-  //         .subscribe((downloadURL: string) => {
-  //           if (!!memoFile) {
-  //             this.memoFileFacade.update({
-  //               ...memoFile,
-  //               url: downloadURL,
-  //               name: fileName,
-  //               initialName: file.name,
-  //             });
-
-  //             this.erase(memoFile.name).pipe(take(1)).subscribe();
-  //           } else {
-  //             this.memoFileFacade.create({
-  //               url: downloadURL,
-  //               name: fileName,
-  //               initialName: file.name,
-  //               userId: this.userFacade.userId,
-  //             });
-  //           }
-  //         })
-  //     )
-  //   );
-  // }
 
   static delete(memoFile: MemoFile): Promise<void> {
     const storage = getStorage(FirebaseService.firebaseApp);

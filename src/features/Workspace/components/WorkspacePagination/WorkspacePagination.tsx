@@ -1,7 +1,13 @@
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  TextField,
+} from '@mui/material';
 import { DEDUCTION_COEFFICIENT, ROWS_PER_PAGE } from 'constants/index';
 import { MemoRow } from 'models';
 import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useAppDispatch } from 'store';
 import { setMemoRowsSelection } from 'store/memo-row/memo-row.slice';
 import { MemoService } from 'utils/memo.service';
@@ -19,24 +25,13 @@ export function WorkspacePagination({
   memoRows: MemoRow[];
 }) {
   const dispatch = useAppDispatch();
-  const {
-    register,
-    watch,
-    getValues,
-    formState: { errors },
-    handleSubmit,
-  } = useForm();
-
-  // const watchShowAge = watch('showAge', false); // you can supply default value as second argument
-  // const watchAllFields = watch(); // when pass nothing as argument, you are watching everything
-
   const [checkAllPages, setCheckAllPages] = useState<boolean>(true);
   const refFromRow = useRef<HTMLInputElement>(null);
   const refToRow = useRef<HTMLInputElement>(null);
+  const [fromRowValue, setFromRowValue] = useState<number>(1);
+  const [toRowValue, setToRowValue] = useState<number>(1);
   let [pages, setPages] = useState<boolean[]>([]);
   let [withFlag, setWithFlag] = useState<boolean>(false);
-  // const [fromRowValue, setFromRowValue] = useState<number>(1);
-  // const [toRowValue, setToRowValue] = useState<number>(1);
 
   useEffect(() => {
     handlePagesChange();
@@ -64,29 +59,32 @@ export function WorkspacePagination({
   };
 
   const handlePagesChange = () => {
-    if (pages && pages.length) {
+    if (!!pages && pages.length) {
       const selectedPages = MemoService.getSelectedPages(pages);
-
       const boundaryIndexes = MemoService.getBoundaryRowsIndexes(
         selectedPages,
         rowsTotalCount,
         ROWS_PER_PAGE
       );
+      const firstRowValue = boundaryIndexes.firstRowIndex + 1 || 0;
+      const lastRowValue = boundaryIndexes.lastRowIndex + 1 || 0;
 
-      refFromRow.current.value = String(boundaryIndexes.firstRowIndex + 1);
-      refToRow.current.value = String(boundaryIndexes.lastRowIndex + 1);
+      setFromRowValue(firstRowValue);
+      setToRowValue(lastRowValue);
 
-      sendSelection();
+      refFromRow.current.value = String(firstRowValue);
+      refToRow.current.value = String(lastRowValue);
+
+      dispatchSelection();
     }
   };
 
-  const sendSelection = (): void => {
+  const dispatchSelection = (): void => {
     const selectedPages = MemoService.getSelectedPages(pages);
-
     const selectedRowsIndexes = MemoService.getSelectedRowsIndexes(
       selectedPages,
-      Number(refFromRow.current.value),
-      Number(refToRow.current.value),
+      Number(refFromRow.current.value) - 1,
+      Number(refToRow.current.value) - 1,
       ROWS_PER_PAGE
     );
 
@@ -128,82 +126,133 @@ export function WorkspacePagination({
     handlePagesChange();
   };
 
-  const addUpRows = (e: any) => {
+  const addUpRows = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     refFromRow.current.value = String(
       Number(refFromRow.current.value) + DEDUCTION_COEFFICIENT
     );
 
-    sendSelection();
+    dispatchSelection();
   };
 
-  const deductRows = (e: any) => {
+  const deductRows = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     refToRow.current.value = String(
       Number(refToRow.current.value) - DEDUCTION_COEFFICIENT
     );
 
-    sendSelection();
+    dispatchSelection();
   };
 
   return (
-    <div style={{ padding: '10px', margin: '10px', border: '1px solid white' }}>
-      <div>
-        words left: {rowsLeftCount || ''} current index: {currentMemoRowId + 1}
-      </div>
-      <div>
-        <form>
+    <>
+      <Box className="dsr-pages-top-panel">
+        <div>words left:</div>
+        <div className="dsr-pages-counter dsr-pages-counter_first">
+          {rowsLeftCount || ''}
+        </div>
+        <div>current index:</div>
+        <div className="dsr-pages-counter">{currentMemoRowId + 1}</div>
+        <div className="dsr-pages-flag">
+          <FormControlLabel
+            control={
+              <Checkbox
+                name="withFlag"
+                onChange={(event) => handleWithFlagChange(event.target.checked)}
+                color="primary"
+              />
+            }
+            label="with flag"
+          />
+        </div>
+      </Box>
+      <form>
+        <Box className="dsr-pages-list">
+          <div className="dsr-page-item dsr-pages-caption dsr-hide-for-small">
+            pages:
+          </div>
           {pages.map((value, index) => (
-            <label key={index}>
-              <input
-                type="checkbox"
-                name="pages"
-                checked={value}
-                {...register(`pages.${index}`)}
+            <FormControlLabel
+              key={index}
+              name="pages"
+              labelPlacement="top"
+              control={
+                <Checkbox
+                  checked={value}
+                  name="checkAllPages"
+                  onChange={(event) =>
+                    handlePageChange(index, event.target.checked)
+                  }
+                />
+              }
+              label={index + 1}
+            />
+          ))}
+          <FormControlLabel
+            className="dsr-all-pages"
+            labelPlacement="top"
+            control={
+              <Checkbox
+                name="checkAllPages"
+                checked={checkAllPages}
                 onChange={(event) =>
-                  handlePageChange(index, event.target.checked)
+                  handleCheckAllPagesChange(event.target.checked)
                 }
               />
-              {index + 1}
-            </label>
-          ))}
-          &nbsp;
-          <input
-            type="checkbox"
-            checked={checkAllPages}
-            {...register('checkAllPages')}
-            onChange={(event) =>
-              handleCheckAllPagesChange(event.target.checked)
             }
+            label="..."
           />
-          ... &nbsp;
-          <input
-            type="checkbox"
-            name="withFlag"
-            {...register('withFlag')}
-            onChange={(event) => handleWithFlagChange(event.target.checked)}
-          />
-          With Flag
-          <br />
-          <button onClick={addUpRows}>+10</button>
-          <input
+        </Box>
+        <Box className="dsr-bounds">
+          <Button
+            className="dsr-bounds__btn"
+            variant="outlined"
+            onClick={addUpRows}
+          >
+            + {DEDUCTION_COEFFICIENT}
+          </Button>
+          <TextField
+            className="dsr-bound-input"
+            label="From"
             type="number"
             name="from"
-            min={refFromRow?.current?.value}
-            ref={refFromRow}
-            onChange={sendSelection}
+            inputRef={refFromRow}
+            InputLabelProps={{ shrink: true }}
+            InputProps={{
+              inputProps: {
+                max: toRowValue,
+                min: fromRowValue,
+              },
+            }}
+            onChange={dispatchSelection}
           />
-          <input
+
+          <TextField
+            className="dsr-bound-input"
+            label="To"
             type="number"
             name="to"
-            max={refToRow?.current?.value}
-            ref={refToRow}
-            onChange={sendSelection}
+            inputRef={refToRow}
+            InputLabelProps={{ shrink: true }}
+            InputProps={{
+              inputProps: {
+                max: toRowValue,
+                min: fromRowValue,
+              },
+            }}
+            onChange={dispatchSelection}
           />
-          <button onClick={deductRows}>-10</button>
-          <br />
-        </form>
-      </div>
-    </div>
+
+          <Button
+            className="dsr-bounds__btn"
+            variant="outlined"
+            onClick={deductRows}
+            disabled={DEDUCTION_COEFFICIENT >= rowsLeftCount}
+          >
+            - {DEDUCTION_COEFFICIENT}
+          </Button>
+        </Box>
+      </form>
+    </>
   );
 }

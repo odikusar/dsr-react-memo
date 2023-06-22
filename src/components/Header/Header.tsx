@@ -13,13 +13,15 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { toggleTheme } from 'store/theme/theme.slice';
 import './Header.scss';
 
-export function Header() {
+export function Header(): JSX.Element {
   const { user, isAuthorized } = useAppSelector(selectAuth);
 
   const dispatch = useAppDispatch();
-  const isDarkTheme = useAppSelector((state) => state.theme.isDarkTheme);
+  const isDarkTheme: boolean = useAppSelector(
+    (state) => state.theme.isDarkTheme
+  );
 
-  const handleSignOut = () => {
+  const handleSignOut = (): JSX.Element => {
     dispatch(signOutUser());
 
     return <Navigate to="/login" />;
